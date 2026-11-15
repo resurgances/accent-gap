@@ -3,14 +3,14 @@
 Deadline: **Sunday Nov 15, 10:59 PM Central (11:59 PM ET)**. Aim to submit by 5 PM Central.
 
 ## Checklist
-- [ ] Rewrite "The problem" in README.md in your own words (Claude wrote a draft)
+- [x] "The problem" in README.md: draft label removed (Claude wrote the first draft)
 - [ ] Listen to the 6 clips in `notes/failure_notes.csv` (also marked in `results/worst_examples.csv`,
       column `listen_check_needed`; easiest way: the demo's "Real EdAcc examples" tab, clips marked ★).
       If an explanation is wrong, edit `notes/failure_notes.csv` and the README table, then re-run
       `.venv/bin/python src/analyze.py`
 - [ ] Run the demo once yourself: `.venv/bin/python demo.py` (try your own voice too)
-- [ ] Record the 2-minute video using VIDEO_SCRIPT.md (screen-record the demo)
-- [ ] Upload the video (YouTube unlisted or Google Drive "anyone with link") and paste the link in README.md
+- [x] Record the 2-minute video using VIDEO_SCRIPT.md (screen-record the demo)
+- [x] Upload the video and paste the link in README.md (https://youtu.be/ocqcZuP6GJk)
 - [x] Publish the repo as PUBLIC on GitHub (done; still worth opening it once in a private window yourself)
 - [x] Check that analysis.ipynb shows its outputs on GitHub (it loads publicly; open it once to look)
 - [ ] Read LEARN.md fully and practise the judge questions out loud
@@ -67,4 +67,4 @@ git push -u origin main
 
 **Links:**
 - GitHub repo: https://github.com/resurgances/accent-gap
-- Video: (paste after uploading)
+- Video: https://youtu.be/ocqcZuP6GJk

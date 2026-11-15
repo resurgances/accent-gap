@@ -3,11 +3,9 @@
 **Team:** Karan Daryanani
 
 > Every number below comes from a file in [`results/`](results/) produced by the code in this repo.
-> The file is named next to each number. Video demo: *(link to be added)*
+> The file is named next to each number. **Video demo: https://youtu.be/ocqcZuP6GJk**
 
 ## The problem
-
-*(DRAFT. Karan: rewrite this in your own words.)*
 
 My parents speak Sindhi. When I dictate a text, Siri types it perfectly. When my mom
 dictates the same kind of message on the same phone, it comes out garbled, and Alexa
@@ -387,6 +385,6 @@ Without it the demo still works, but shows text only:
 ```
 
 Repo map: `src/` = pipeline scripts, `results/` = every number and chart, `analysis.ipynb` = all
-tables and charts in one place, `demo.py` = Gradio demo, `LEARN.md` = plain-language explanation
+tables and charts in one place, `WRITEUP.pdf` = this README as a PDF (`src/make_writeup_pdf.py`), `demo.py` = Gradio demo, `LEARN.md` = plain-language explanation
 and judge Q&A, `notes/failure_notes.csv` = our hand-written explanations of example failures.
 Audio is never committed (`data_cache/` is git-ignored).
