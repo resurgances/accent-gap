@@ -4,8 +4,10 @@ Deadline: **Sunday Nov 15, 10:59 PM Central (11:59 PM ET)**. Aim to submit by 5 
 
 ## Checklist
 - [ ] Rewrite "The problem" in README.md in your own words (Claude wrote a draft)
-- [ ] Listen to the 5 clips marked in `results/worst_examples.csv` (column `listen_check_needed`)
-      and fix the "why we think it failed" explanations if they are wrong
+- [ ] Listen to the 6 clips in `notes/failure_notes.csv` (also marked in `results/worst_examples.csv`,
+      column `listen_check_needed`; easiest way: the demo's "Real EdAcc examples" tab, clips marked ★).
+      If an explanation is wrong, edit `notes/failure_notes.csv` and the README table, then re-run
+      `.venv/bin/python src/analyze.py`
 - [ ] Run the demo once yourself: `.venv/bin/python demo.py` (try your own voice too)
 - [ ] Record the 2-minute video using VIDEO_SCRIPT.md (screen-record the demo)
 - [ ] Upload the video (YouTube unlisted or Google Drive "anyone with link") and paste the link in README.md
@@ -43,6 +45,23 @@ English than for native US/UK English on public data, find which words it gets w
 - jiwer (WER alignment): https://github.com/jitsi/jiwer
 - librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, Gradio, Jupyter
 - Claude Code (Anthropic) was used as an AI coding assistant: https://www.anthropic.com/claude-code
+
+## Publishing the repo on GitHub (gh is not installed on this Mac)
+
+1. In your browser go to https://github.com/new, name it `accent-gap`, choose **Public**, and do NOT
+   add a README, .gitignore or license (the repo already has them). Click "Create repository".
+2. In Terminal:
+
+```bash
+cd ~/Documents/accent-gap
+git remote add origin https://github.com/YOUR-USERNAME/accent-gap.git
+git push -u origin main
+```
+
+3. When git asks for a password, paste a **personal access token**, not your GitHub password.
+   Create one at https://github.com/settings/tokens → "Generate new token (classic)" → tick `repo` → copy it.
+   macOS Keychain will remember it.
+4. Open the repo in a private window and check that README charts and analysis.ipynb outputs show.
 
 **Links:**
 - GitHub repo: (paste after publishing)
