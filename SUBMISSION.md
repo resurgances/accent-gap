@@ -11,8 +11,8 @@ Deadline: **Sunday Nov 15, 10:59 PM Central (11:59 PM ET)**. Aim to submit by 5 
 - [ ] Run the demo once yourself: `.venv/bin/python demo.py` (try your own voice too)
 - [ ] Record the 2-minute video using VIDEO_SCRIPT.md (screen-record the demo)
 - [ ] Upload the video (YouTube unlisted or Google Drive "anyone with link") and paste the link in README.md
-- [ ] Publish the repo as PUBLIC on GitHub and open it in a private/incognito window to check it is visible
-- [ ] Check that analysis.ipynb shows its outputs on GitHub
+- [x] Publish the repo as PUBLIC on GitHub (done; still worth opening it once in a private window yourself)
+- [x] Check that analysis.ipynb shows its outputs on GitHub (it loads publicly; open it once to look)
 - [ ] Read LEARN.md fully and practise the judge questions out loud
 - [ ] Fill in the form with the text below
 
@@ -48,7 +48,7 @@ English than for native US/UK English on public data, find which words it gets w
 - librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, peft (LoRA), Gradio, uv, Jupyter
 - Claude Code (Anthropic) was used as an AI coding assistant: https://www.anthropic.com/claude-code
 
-## Publishing the repo on GitHub (gh is not installed on this Mac)
+## Publishing the repo on GitHub (done: https://github.com/resurgances/accent-gap; steps kept for reference)
 
 1. In your browser go to https://github.com/new, name it `accent-gap`, choose **Public**, and do NOT
    add a README or .gitignore (the repo already has them). Click "Create repository".
@@ -66,5 +66,5 @@ git push -u origin main
 4. Open the repo in a private window and check that README charts and analysis.ipynb outputs show.
 
 **Links:**
-- GitHub repo: (paste after publishing)
+- GitHub repo: https://github.com/resurgances/accent-gap
 - Video: (paste after uploading)

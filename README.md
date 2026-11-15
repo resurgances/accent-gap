@@ -350,7 +350,7 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
 Tested on macOS (Apple Silicon M3 Pro) with Python 3.14. Uses the Apple GPU (MPS) if available, otherwise the CPU.
 
 ```bash
-git clone <this repo> accent-gap && cd accent-gap
+git clone https://github.com/resurgances/accent-gap.git accent-gap && cd accent-gap
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
