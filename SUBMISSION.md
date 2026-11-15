@@ -18,6 +18,37 @@ Deadline: **Sunday Nov 15, 10:59 PM Central (11:59 PM ET)**. Aim to submit by 5 
 
 ## Copy-paste text for the form
 
+**Project title:** Accent Gap: Does Speech-to-Text Understand South Asian Accents?
+
+**Code link:** https://github.com/resurgances/accent-gap
+
+**Write-up link:** https://github.com/resurgances/accent-gap#readme
+
+**Write-up file:** `WRITEUP.pdf` (the README as a PDF, charts included):
+https://github.com/resurgances/accent-gap/blob/main/WRITEUP.pdf
+
+**Video:** https://youtu.be/ocqcZuP6GJk
+
+**One-sentence pitch:** We measured whether OpenAI's Whisper understands South Asian-accented
+English worse than native English on 1,628 real held-out clips, tested a "personal mode" that learns
+each speaker's own words, and built a demo that transcribes your accent, translates it, and speaks
+the translation back in your own voice.
+
+**Anything else they should know:**
+- Honest results: we expected a South Asian gap and did not find one on this dataset (20.6% vs
+  23.1% word error rate, 95% CI of the ratio 0.69 to 1.20). Jamaican and Nigerian English were
+  clearly worse. Personal mode lowered errors by 1.3 points overall, and the speaker's own words
+  beat someone else's by 1.8 points (95% CI +0.5 to +3.2). Our LoRA fine-tune made things worse,
+  and we report that too.
+- Every number in the write-up comes from a file in `results/` produced by code in the repo. Word
+  lists only use the earlier part of each conversation, and scoring uses the later part (no leakage).
+- Everything runs locally on a laptop (no paid APIs). Public data only (EdAcc); no audio is in the repo.
+- Main limitation: only 8 South Asian speakers in EdAcc and no Sindhi speakers, so "no gap found"
+  is not "no gap exists". Next step: consented recordings of speakers like my parents.
+- The voice-cloned audio is labelled AI-generated and watermarked by the model.
+- Claude Code (Anthropic) was used as an AI coding assistant, and all tools and data are credited
+  in the README.
+
 **Project name:** Accent Gap
 
 **Track:** Languages (AI + Languages)
