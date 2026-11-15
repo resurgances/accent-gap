@@ -189,6 +189,22 @@ model is not a fix for accent gaps.
   list beats the control by **1.8 points (CI +0.5 to +3.2)**. This is our most solid finding:
   *personal* words help, while random prompts do not.
 - v1 (a bare comma list) made things worse because of repetition loops (see Phase 3).
+- **Model size matters.** The same final design helps whisper-base (+1.4) and whisper-small (+1.3),
+  but **hurts whisper-medium** (-2.7, CI -3.9 to -1.3). With a prompt, medium often stops after
+  one word ("I", "Yeah.") on long clips, so deletions go up (South Asian 11.7% -> 15.0%). We
+  chose the design with whisper-small on dev speakers, and it did not transfer. Lesson: a
+  prompt that works for one model can break another, so you must re-test per model.
+
+### E4 (stretch): LoRA fine-tune (`results/lora_vs_plain.csv`)
+**LoRA** = "low-rank adaptation". Instead of retraining all ~240 million weights, we freeze
+Whisper and train small extra matrices (about 1.8 million numbers, 0.7%) inside the attention
+layers. We trained only on the 32 DEV speakers (speaker-disjoint: none of the 40 test speakers).
+Result: WER got **worse**, 25.5% -> 31.2% over all 40 speakers (-5.7, CI -11.1 to -0.4). The model
+learned to write repeated words like EdAcc does (deletions 13.9% -> 5.3%), but it also learned to
+loop ("they they they ..."): clips with 5+ inserted words went from 17 to 56. Lesson: fine-tuning
+is powerful but easy to get wrong, and a quick untuned run is not a fair test of the idea. Our first
+two training attempts were also too slow (GPU shared with another job, then a GPU memory
+build-up), and the third, fixed run is the one reported.
 
 ### Error analysis (`results/miss_rate_by_word_type.csv`, `results/wer_by_length.csv`, `results/missed_words_by_group.csv`)
 - Rare words (names, places) are missed about 2-3x as often as common words (South Asian
@@ -254,7 +270,13 @@ drop "um") so formatting differences don't count as recognition errors.
 Plain Whisper with no prompt, on exactly the same clips. For personal mode there's a second
 baseline: the same prompt format with someone else's word list (the control).
 
-**10. "What's the AI here, did you just call an API?"**
+**10. "Would personal mode work on a bigger, better model?"**
+Not as we built it. On whisper-medium the same prompt made results worse (-2.7 points),
+because medium tends to stop transcribing early when given a prompt. Personal words still did
+better than someone else's words, but both were worse than no prompt. A product would need to
+tune the prompt for each model, or use a different method (like fine-tuning).
+
+**11. "What's the AI here, did you just call an API?"**
 The AI is OpenAI's Whisper, a neural network that turns audio into text. It runs locally on my
 laptop (no API). My contributions are the evaluation design (groups, leak-free split, bootstrap
 CIs, control, dev set), the personal-mode method and loop guard, the error analysis, and the

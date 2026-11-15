@@ -1,4 +1,84 @@
 model,prompt,speaker,group,subgroup,clips,plain_wer_pct,prompted_wer_pct,gain_points
+base,personal,EDACC-C03-B,Native US/UK English,UK English,19,22.5,20.0,2.5
+base,personal,EDACC-C05-B,South Asian English,Indian English accent,76,28.0,24.0,4.0
+base,personal,EDACC-C06-A,Native US/UK English,UK English,25,26.2,27.2,-0.9
+base,personal,EDACC-C06-B,Native US/UK English,US English,20,42.0,37.6,4.4
+base,personal,EDACC-C07-A,Native US/UK English,US English,36,26.6,21.6,5.0
+base,personal,EDACC-C09-A,South Asian English,Indian English accent,38,35.4,37.4,-1.9
+base,personal,EDACC-C09-B,South Asian English,Indian English accent,51,23.4,24.5,-1.1
+base,personal,EDACC-C10-A,South Asian English,Sinhalese L1,12,51.3,42.6,8.7
+base,personal,EDACC-C10-B,South Asian English,Sinhalese L1,16,21.1,20.7,0.4
+base,personal,EDACC-C11-B,Native US/UK English,UK English,22,19.9,20.4,-0.5
+base,personal,EDACC-C14-A,Native US/UK English,US English,35,18.7,19.1,-0.5
+base,personal,EDACC-C17-B,Native US/UK English,UK English,28,29.3,29.0,0.3
+base,personal,EDACC-C19-B,Native US/UK English,US English,6,16.5,20.7,-4.1
+base,personal,EDACC-C21-A,Spanish-accented English,Spanish-accented English,28,35.0,35.3,-0.2
+base,personal,EDACC-C21-B,Spanish-accented English,Spanish-accented English,27,24.6,26.7,-2.1
+base,personal,EDACC-C23-A,Spanish-accented English,Spanish-accented English,74,47.8,33.5,14.3
+base,personal,EDACC-C27-B,Spanish-accented English,Spanish-accented English,19,39.8,36.8,3.0
+base,personal,EDACC-C29-A,Nigerian English,Nigerian English,100,37.9,43.3,-5.4
+base,personal,EDACC-C29-B,Nigerian English,Nigerian English,100,34.2,32.6,1.6
+base,personal,EDACC-C31-A,South Asian English,Urdu L1,37,24.7,22.3,2.4
+base,personal,EDACC-C31-B,South Asian English,Urdu L1,26,31.9,32.9,-1.0
+base,personal,EDACC-C32-A,Native US/UK English,UK English,77,39.0,30.2,8.7
+base,personal,EDACC-C32-B,Native US/UK English,UK English,71,34.2,31.8,2.4
+base,personal,EDACC-C33-A,Native US/UK English,UK English,46,33.9,35.1,-1.2
+base,personal,EDACC-C36-A,South Asian English,Indian English accent,100,19.3,17.0,2.3
+base,personal,EDACC-C37-A,Spanish-accented English,Spanish-accented English,58,44.8,45.0,-0.1
+base,personal,EDACC-C37-B,Spanish-accented English,Spanish-accented English,81,41.6,40.9,0.7
+base,personal,EDACC-C41-A,Nigerian English,Nigerian English,35,29.8,31.5,-1.7
+base,personal,EDACC-C41-B,Native US/UK English,UK English,29,43.1,43.1,0.0
+base,personal,EDACC-C42-B,Native US/UK English,UK English,24,25.7,24.7,1.0
+base,personal,EDACC-C45-A,Nigerian English,Nigerian English,19,60.4,61.1,-0.8
+base,personal,EDACC-C45-B,Nigerian English,Nigerian English,20,49.8,49.8,0.0
+base,personal,EDACC-C48-A,Jamaican English,Jamaican English,9,37.8,41.3,-3.5
+base,personal,EDACC-C48-B,Jamaican English,Jamaican English,13,25.7,26.6,-1.0
+base,personal,EDACC-C49-A,Jamaican English,Jamaican English,42,47.1,45.1,2.0
+base,personal,EDACC-C49-B,Jamaican English,Jamaican English,41,56.9,55.0,1.9
+base,personal,EDACC-C52-A,Jamaican English,Jamaican English,48,35.4,40.2,-4.8
+base,personal,EDACC-C52-B,Jamaican English,Jamaican English,51,114.6,89.7,24.9
+base,personal,EDACC-C63-B,Native US/UK English,US English,25,14.4,25.6,-11.3
+base,personal,EDACC-C64-A,Native US/UK English,US English,44,24.4,27.5,-3.1
+base,control,EDACC-C03-B,Native US/UK English,UK English,19,22.5,24.3,-1.7
+base,control,EDACC-C05-B,South Asian English,Indian English accent,76,28.0,27.7,0.3
+base,control,EDACC-C06-A,Native US/UK English,UK English,25,26.2,27.0,-0.7
+base,control,EDACC-C06-B,Native US/UK English,US English,20,42.0,46.3,-4.4
+base,control,EDACC-C07-A,Native US/UK English,US English,36,26.6,33.0,-6.4
+base,control,EDACC-C09-A,South Asian English,Indian English accent,38,35.4,43.4,-8.0
+base,control,EDACC-C09-B,South Asian English,Indian English accent,51,23.4,32.3,-8.9
+base,control,EDACC-C10-A,South Asian English,Sinhalese L1,12,51.3,42.6,8.7
+base,control,EDACC-C10-B,South Asian English,Sinhalese L1,16,21.1,19.4,1.8
+base,control,EDACC-C11-B,Native US/UK English,UK English,22,19.9,19.6,0.3
+base,control,EDACC-C14-A,Native US/UK English,US English,35,18.7,20.0,-1.4
+base,control,EDACC-C17-B,Native US/UK English,UK English,28,29.3,27.7,1.6
+base,control,EDACC-C19-B,Native US/UK English,US English,6,16.5,17.4,-0.8
+base,control,EDACC-C21-A,Spanish-accented English,Spanish-accented English,28,35.0,33.6,1.4
+base,control,EDACC-C21-B,Spanish-accented English,Spanish-accented English,27,24.6,27.2,-2.6
+base,control,EDACC-C23-A,Spanish-accented English,Spanish-accented English,74,47.8,33.4,14.4
+base,control,EDACC-C27-B,Spanish-accented English,Spanish-accented English,19,39.8,34.8,5.0
+base,control,EDACC-C29-A,Nigerian English,Nigerian English,100,37.9,45.4,-7.5
+base,control,EDACC-C29-B,Nigerian English,Nigerian English,100,34.2,38.6,-4.3
+base,control,EDACC-C31-A,South Asian English,Urdu L1,37,24.7,22.9,1.8
+base,control,EDACC-C31-B,South Asian English,Urdu L1,26,31.9,30.3,1.5
+base,control,EDACC-C32-A,Native US/UK English,UK English,77,39.0,32.7,6.3
+base,control,EDACC-C32-B,Native US/UK English,UK English,71,34.2,33.3,0.8
+base,control,EDACC-C33-A,Native US/UK English,UK English,46,33.9,35.2,-1.4
+base,control,EDACC-C36-A,South Asian English,Indian English accent,100,19.3,18.0,1.3
+base,control,EDACC-C37-A,Spanish-accented English,Spanish-accented English,58,44.8,25.4,19.4
+base,control,EDACC-C37-B,Spanish-accented English,Spanish-accented English,81,41.6,43.9,-2.3
+base,control,EDACC-C41-A,Nigerian English,Nigerian English,35,29.8,35.8,-6.0
+base,control,EDACC-C41-B,Native US/UK English,UK English,29,43.1,41.9,1.2
+base,control,EDACC-C42-B,Native US/UK English,UK English,24,25.7,28.4,-2.7
+base,control,EDACC-C45-A,Nigerian English,Nigerian English,19,60.4,57.7,2.7
+base,control,EDACC-C45-B,Nigerian English,Nigerian English,20,49.8,49.5,0.3
+base,control,EDACC-C48-A,Jamaican English,Jamaican English,9,37.8,35.2,2.6
+base,control,EDACC-C48-B,Jamaican English,Jamaican English,13,25.7,25.4,0.2
+base,control,EDACC-C49-A,Jamaican English,Jamaican English,42,47.1,51.2,-4.1
+base,control,EDACC-C49-B,Jamaican English,Jamaican English,41,56.9,57.6,-0.7
+base,control,EDACC-C52-A,Jamaican English,Jamaican English,48,35.4,37.8,-2.4
+base,control,EDACC-C52-B,Jamaican English,Jamaican English,51,114.6,95.3,19.3
+base,control,EDACC-C63-B,Native US/UK English,US English,25,14.4,16.2,-1.8
+base,control,EDACC-C64-A,Native US/UK English,US English,44,24.4,28.1,-3.7
 base,personal_v1,EDACC-C03-B,Native US/UK English,UK English,19,22.5,21.8,0.7
 base,personal_v1,EDACC-C05-B,South Asian English,Indian English accent,76,28.0,30.0,-2.0
 base,personal_v1,EDACC-C06-A,Native US/UK English,UK English,25,26.2,25.8,0.4
@@ -199,3 +279,83 @@ small,control_v1,EDACC-C52-A,Jamaican English,Jamaican English,48,29.7,72.4,-42.
 small,control_v1,EDACC-C52-B,Jamaican English,Jamaican English,51,78.8,135.8,-57.0
 small,control_v1,EDACC-C63-B,Native US/UK English,US English,25,13.6,13.6,0.0
 small,control_v1,EDACC-C64-A,Native US/UK English,US English,44,21.3,21.6,-0.3
+medium,personal,EDACC-C03-B,Native US/UK English,UK English,19,16.3,17.3,-1.0
+medium,personal,EDACC-C05-B,South Asian English,Indian English accent,76,14.0,21.2,-7.2
+medium,personal,EDACC-C06-A,Native US/UK English,UK English,25,16.7,27.0,-10.3
+medium,personal,EDACC-C06-B,Native US/UK English,US English,20,33.4,39.0,-5.6
+medium,personal,EDACC-C07-A,Native US/UK English,US English,36,15.9,24.9,-9.0
+medium,personal,EDACC-C09-A,South Asian English,Indian English accent,38,26.2,29.6,-3.4
+medium,personal,EDACC-C09-B,South Asian English,Indian English accent,51,20.8,21.0,-0.2
+medium,personal,EDACC-C10-A,South Asian English,Sinhalese L1,12,27.8,30.4,-2.6
+medium,personal,EDACC-C10-B,South Asian English,Sinhalese L1,16,10.1,11.5,-1.3
+medium,personal,EDACC-C11-B,Native US/UK English,UK English,22,13.6,15.5,-2.0
+medium,personal,EDACC-C14-A,Native US/UK English,US English,35,12.0,11.5,0.5
+medium,personal,EDACC-C17-B,Native US/UK English,UK English,28,20.9,23.1,-2.1
+medium,personal,EDACC-C19-B,Native US/UK English,US English,6,3.3,12.4,-9.1
+medium,personal,EDACC-C21-A,Spanish-accented English,Spanish-accented English,28,29.7,30.6,-0.9
+medium,personal,EDACC-C21-B,Spanish-accented English,Spanish-accented English,27,18.2,21.7,-3.5
+medium,personal,EDACC-C23-A,Spanish-accented English,Spanish-accented English,74,22.9,26.6,-3.8
+medium,personal,EDACC-C27-B,Spanish-accented English,Spanish-accented English,19,59.9,36.1,23.7
+medium,personal,EDACC-C29-A,Nigerian English,Nigerian English,100,29.3,35.4,-6.0
+medium,personal,EDACC-C29-B,Nigerian English,Nigerian English,100,24.1,27.4,-3.3
+medium,personal,EDACC-C31-A,South Asian English,Urdu L1,37,21.4,22.9,-1.5
+medium,personal,EDACC-C31-B,South Asian English,Urdu L1,26,26.5,28.3,-1.8
+medium,personal,EDACC-C32-A,Native US/UK English,UK English,77,23.6,19.3,4.4
+medium,personal,EDACC-C32-B,Native US/UK English,UK English,71,23.7,25.1,-1.4
+medium,personal,EDACC-C33-A,Native US/UK English,UK English,46,18.3,20.0,-1.7
+medium,personal,EDACC-C36-A,South Asian English,Indian English accent,100,14.4,16.3,-1.9
+medium,personal,EDACC-C37-A,Spanish-accented English,Spanish-accented English,58,19.8,27.5,-7.6
+medium,personal,EDACC-C37-B,Spanish-accented English,Spanish-accented English,81,24.7,30.9,-6.2
+medium,personal,EDACC-C41-A,Nigerian English,Nigerian English,35,18.7,17.0,1.7
+medium,personal,EDACC-C41-B,Native US/UK English,UK English,29,28.8,27.6,1.2
+medium,personal,EDACC-C42-B,Native US/UK English,UK English,24,12.9,15.3,-2.4
+medium,personal,EDACC-C45-A,Nigerian English,Nigerian English,19,32.3,30.3,2.0
+medium,personal,EDACC-C45-B,Nigerian English,Nigerian English,20,30.0,32.8,-2.8
+medium,personal,EDACC-C48-A,Jamaican English,Jamaican English,9,28.3,31.7,-3.5
+medium,personal,EDACC-C48-B,Jamaican English,Jamaican English,13,13.3,12.6,0.7
+medium,personal,EDACC-C49-A,Jamaican English,Jamaican English,42,21.9,21.9,0.0
+medium,personal,EDACC-C49-B,Jamaican English,Jamaican English,41,46.0,43.3,2.6
+medium,personal,EDACC-C52-A,Jamaican English,Jamaican English,48,24.4,32.4,-8.1
+medium,personal,EDACC-C52-B,Jamaican English,Jamaican English,51,51.6,53.5,-1.9
+medium,personal,EDACC-C63-B,Native US/UK English,US English,25,10.0,12.6,-2.6
+medium,personal,EDACC-C64-A,Native US/UK English,US English,44,19.8,19.9,-0.2
+medium,control,EDACC-C03-B,Native US/UK English,UK English,19,16.3,17.8,-1.5
+medium,control,EDACC-C05-B,South Asian English,Indian English accent,76,14.0,19.3,-5.3
+medium,control,EDACC-C06-A,Native US/UK English,UK English,25,16.7,16.1,0.6
+medium,control,EDACC-C06-B,Native US/UK English,US English,20,33.4,36.8,-3.4
+medium,control,EDACC-C07-A,Native US/UK English,US English,36,15.9,24.2,-8.3
+medium,control,EDACC-C09-A,South Asian English,Indian English accent,38,26.2,30.6,-4.4
+medium,control,EDACC-C09-B,South Asian English,Indian English accent,51,20.8,27.2,-6.4
+medium,control,EDACC-C10-A,South Asian English,Sinhalese L1,12,27.8,30.4,-2.6
+medium,control,EDACC-C10-B,South Asian English,Sinhalese L1,16,10.1,10.1,0.0
+medium,control,EDACC-C11-B,Native US/UK English,UK English,22,13.6,15.5,-2.0
+medium,control,EDACC-C14-A,Native US/UK English,US English,35,12.0,13.6,-1.6
+medium,control,EDACC-C17-B,Native US/UK English,UK English,28,20.9,30.0,-9.1
+medium,control,EDACC-C19-B,Native US/UK English,US English,6,3.3,5.0,-1.7
+medium,control,EDACC-C21-A,Spanish-accented English,Spanish-accented English,28,29.7,32.0,-2.3
+medium,control,EDACC-C21-B,Spanish-accented English,Spanish-accented English,27,18.2,22.5,-4.3
+medium,control,EDACC-C23-A,Spanish-accented English,Spanish-accented English,74,22.9,30.7,-7.8
+medium,control,EDACC-C27-B,Spanish-accented English,Spanish-accented English,19,59.9,67.6,-7.7
+medium,control,EDACC-C29-A,Nigerian English,Nigerian English,100,29.3,34.6,-5.2
+medium,control,EDACC-C29-B,Nigerian English,Nigerian English,100,24.1,29.7,-5.6
+medium,control,EDACC-C31-A,South Asian English,Urdu L1,37,21.4,24.2,-2.8
+medium,control,EDACC-C31-B,South Asian English,Urdu L1,26,26.5,27.2,-0.8
+medium,control,EDACC-C32-A,Native US/UK English,UK English,77,23.6,17.7,6.0
+medium,control,EDACC-C32-B,Native US/UK English,UK English,71,23.7,23.9,-0.1
+medium,control,EDACC-C33-A,Native US/UK English,UK English,46,18.3,24.9,-6.6
+medium,control,EDACC-C36-A,South Asian English,Indian English accent,100,14.4,18.1,-3.7
+medium,control,EDACC-C37-A,Spanish-accented English,Spanish-accented English,58,19.8,26.2,-6.3
+medium,control,EDACC-C37-B,Spanish-accented English,Spanish-accented English,81,24.7,31.5,-6.7
+medium,control,EDACC-C41-A,Nigerian English,Nigerian English,35,18.7,16.0,2.7
+medium,control,EDACC-C41-B,Native US/UK English,UK English,29,28.8,26.2,2.6
+medium,control,EDACC-C42-B,Native US/UK English,UK English,24,12.9,15.1,-2.2
+medium,control,EDACC-C45-A,Nigerian English,Nigerian English,19,32.3,27.6,4.7
+medium,control,EDACC-C45-B,Nigerian English,Nigerian English,20,30.0,31.0,-0.9
+medium,control,EDACC-C48-A,Jamaican English,Jamaican English,9,28.3,29.1,-0.9
+medium,control,EDACC-C48-B,Jamaican English,Jamaican English,13,13.3,12.8,0.5
+medium,control,EDACC-C49-A,Jamaican English,Jamaican English,42,21.9,29.7,-7.8
+medium,control,EDACC-C49-B,Jamaican English,Jamaican English,41,46.0,50.0,-4.0
+medium,control,EDACC-C52-A,Jamaican English,Jamaican English,48,24.4,28.5,-4.1
+medium,control,EDACC-C52-B,Jamaican English,Jamaican English,51,51.6,52.9,-1.2
+medium,control,EDACC-C63-B,Native US/UK English,US English,25,10.0,10.8,-0.8
+medium,control,EDACC-C64-A,Native US/UK English,US English,44,19.8,20.8,-1.1

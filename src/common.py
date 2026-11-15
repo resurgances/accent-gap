@@ -83,9 +83,13 @@ def load_whisper(size="small"):
     """Load a pretrained Whisper model (no training by us)."""
     import torch
     from transformers import WhisperForConditionalGeneration, WhisperProcessor
-    name = f"openai/whisper-{size}"
+    lora = size.endswith("-lora")  # E4: whisper-small + our LoRA adapter (lora_out/)
+    name = f"openai/whisper-{size.replace('-lora', '')}"
     processor = WhisperProcessor.from_pretrained(name)
     model = WhisperForConditionalGeneration.from_pretrained(name, dtype=torch.float32)
+    if lora:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, os.path.join(ROOT, "lora_out")).merge_and_unload()
     model.to(get_device()).eval()
     return processor, model
 

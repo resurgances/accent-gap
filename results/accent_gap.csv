@@ -11,3 +11,7 @@ medium_plain,South Asian English,18.0,18.7,0.96,0.77,1.3
 medium_plain,Nigerian English,26.5,18.7,1.42,1.16,1.74
 medium_plain,Jamaican English,29.9,18.7,1.59,1.07,2.32
 medium_plain,Spanish-accented English,25.5,18.7,1.36,1.07,1.89
+small-lora_plain,South Asian English,21.4,26.5,0.81,0.43,1.58
+small-lora_plain,Nigerian English,40.3,26.5,1.52,0.85,2.26
+small-lora_plain,Jamaican English,51.1,26.5,1.93,1.05,3.4
+small-lora_plain,Spanish-accented English,28.4,26.5,1.07,0.72,1.59

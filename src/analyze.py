@@ -257,6 +257,11 @@ def main():
                                       "outputs_replaced_by_loop_guard": n_loops})
     if loop_rows:
         save(pd.DataFrame(loop_rows), "loop_guard_counts.csv")
+    # E4 (stretch): whisper-small + LoRA trained on DEV speakers only
+    h = read_hyps(output_path("small-lora", "plain"))
+    d4 = score_system(clips, hyps=h, name="small-lora_plain") if h is not None else None
+    if d4 is not None:
+        systems["small-lora_plain"] = d4
     print("systems scored:", list(systems))
 
     # ---- E1 + all systems: WER per group / subgroup / speaker
@@ -266,6 +271,19 @@ def main():
     save(speaker_table(systems), "wer_by_speaker.csv")
     save(pd.concat([gap_table(df, s) for s, df in systems.items() if s.endswith("plain")]), "accent_gap.csv")
     chart_wer_by_group(wt)
+
+    # ---- E4: LoRA vs plain whisper-small, same clips (paired, resampling speakers)
+    if "small-lora_plain" in systems:
+        a, b = systems["small_plain"], systems["small-lora_plain"]
+        rows = []
+        for g in GROUPS + [ALL]:
+            da, db = in_group(a, g), in_group(b, g)
+            lo, hi = bootstrap_paired_diff(da, db)
+            rows.append({"group": g, "speakers": da.speaker.nunique(), "small_wer_pct": pct(pooled_wer(da)),
+                         "small_lora_wer_pct": pct(pooled_wer(db)), "gain_points": pct(pooled_wer(da) - pooled_wer(db)),
+                         "gain_ci_low": pct(lo), "gain_ci_high": pct(hi),
+                         "small_del_pct": pct(da.D.sum() / da.N.sum()), "lora_del_pct": pct(db.D.sum() / db.N.sum())})
+        save(pd.DataFrame(rows), "lora_vs_plain.csv")
 
     # ---- E2: model size
     e2 = [f"{m}_plain" for m in MODELS if f"{m}_plain" in systems]

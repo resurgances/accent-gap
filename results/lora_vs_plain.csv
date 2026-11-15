@@ -1,0 +1,7 @@
+group,speakers,small_wer_pct,small_lora_wer_pct,gain_points,gain_ci_low,gain_ci_high,small_del_pct,lora_del_pct
+South Asian English,8,20.6,21.4,-0.8,-13.4,6.1,12.8,4.1
+Native US/UK English,15,23.1,26.5,-3.4,-13.2,5.9,13.9,5.0
+Nigerian English,5,28.1,40.3,-12.2,-22.0,3.0,16.1,6.4
+Jamaican English,6,37.6,51.1,-13.4,-26.5,-2.5,12.7,7.4
+Spanish-accented English,6,25.4,28.4,-3.0,-10.4,4.9,13.3,4.8
+All groups (40 speakers),40,25.5,31.2,-5.7,-11.1,-0.4,13.9,5.3

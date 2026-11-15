@@ -145,7 +145,7 @@ ratios *grow* (Nigerian 1.21× → 1.42×, Spanish 1.10× → 1.36× from small 
 clip: base 0.20 s, small 0.27 s, medium 1.14 s (`results/model_speed.csv`; measured while other
 jobs shared the GPU).
 
-### 3. Personal mode: a small gain, from *personal* words, but it does not close an accent gap
+### 3. Personal mode: a small gain on whisper-small from *personal* words. It does not close an accent gap and backfires on whisper-medium
 
 ![Personal mode](results/personal_mode.png)
 
@@ -183,6 +183,42 @@ repetition loops like "no, no, no, ..." about 100 times. We picked the fix on th
 only (`results/dev_tuning.csv`). There, plain Whisper scored 21.9% WER, v1 24.9%, and the chosen
 sentence prompt + loop guard 21.0%. On the eval clips the loop guard replaced 7 of 1,628
 personal-mode outputs (`results/loop_guard_counts.csv`).
+
+**Personal mode depends on the model size, and it backfires on whisper-medium.** We ran the same
+final design on all three sizes. All 40 speakers (`results/personal_mode_by_group.csv`,
+`results/personal_vs_control.csv`):
+
+| Model | Standard | Personal mode | Gain (95% CI) | Control gain | Personal beats control by (95% CI) |
+|---|---|---|---|---|---|
+| whisper-base | 35.0% | 33.6% | +1.4 (−0.3 to +3.3) | 0.0 | +1.3 (−0.8 to +2.9) |
+| whisper-small | 25.5% | 24.3% | +1.3 (−0.1 to +2.7) | −0.5 | +1.8 (+0.5 to +3.2) |
+| whisper-medium | 22.4% | 25.1% | **−2.7 (−3.9 to −1.3)** | −3.6 | +0.9 (−0.3 to +2.1) |
+
+With whisper-medium, *any* word-list prompt makes the model **stop too early**. On long clips it
+often writes only "I" or "Yeah.", and deletions go up in every group (South Asian 11.7% → 15.0%,
+native 11.3% → 13.6%; `results/wer_by_group_all_systems.csv`, column `del_pct`). Our design was
+chosen on dev speakers with whisper-small and **does not transfer** to medium. A real product would
+have to tune it per model. Personal words still beat someone else's words on every model size,
+though the margin is only significant for small.
+
+### 3b. Stretch (E4): a quick LoRA fine-tune made things worse
+
+We fine-tuned whisper-small with LoRA, a small set of extra trainable weights (0.7% of the model),
+for one epoch. Training used 1,254 clips from the 32 dev speakers only, so none of the 40
+evaluation speakers were seen (speaker-disjoint; `src/lora_finetune.py`). On the same eval clips
+(`results/lora_vs_plain.csv`, `results/insertions_by_system.csv`):
+
+| | whisper-small | + LoRA | Gain (95% CI) |
+|---|---|---|---|
+| South Asian English | 20.6% | 21.4% | −0.8 (−13.4 to +6.1) |
+| Native US/UK English | 23.1% | 26.5% | −3.4 (−13.2 to +5.9) |
+| All 40 speakers | 25.5% | 31.2% | **−5.7 (−11.1 to −0.4)** |
+
+The fine-tune learned EdAcc's *style*: it now writes repeated words the way EdAcc does, so
+deletions fell from 13.9% to 5.3% of words. But it also started repeating words in loops
+("they they they ..."). Clips with 5+ inserted words rose from 17 to 56 out of 1,628, and
+overall WER got worse. This was a short, untuned run, so it shows that a naive fine-tune is not
+an easy win. It does not show that fine-tuning cannot work.
 
 ### 4. Where it fails: side-by-side examples
 
@@ -238,13 +274,14 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
    Then measure the gap where we suspect it is largest.
 2. **Better personal lists:** use contacts, names and places from the user's own messages
    (on-device and private) instead of conversation words. Names were the hardest word type.
-3. **Voice adaptation:** a small LoRA fine-tune on a few minutes of one person's speech
-   (speaker-adaptive training), compared against prompting on the same split.
+3. **Voice adaptation done properly:** our quick LoRA run (E4) learned to loop. Next we'd try a
+   per-speaker LoRA on a few minutes of one person's speech, with a validation set, a smaller
+   learning rate and the loop guard, compared against prompting on the same split.
 4. **Larger accent sets** (e.g. more South Asian speech corpora) to shrink the confidence intervals.
 
 ## Sources
 - **Whisper** (OpenAI): Radford et al., "Robust Speech Recognition via Large-Scale Weak Supervision", 2022. Models `openai/whisper-base`, `-small`, `-medium`: https://huggingface.co/openai/whisper-small, code: https://github.com/openai/whisper (the 2.4 compression-ratio loop test comes from Whisper's decoding code)
-- **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc
+- **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc (license: CC BY-SA 4.0; the reference transcripts copied into `results/` come from EdAcc and are shared under the same license, no audio is redistributed)
 - **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); Gradio (demo); Jupyter.
 - **AI assistance:** Claude Code (Anthropic) was used as an AI coding assistant to write and debug the code and draft the documentation. All results were produced by running this code.
 

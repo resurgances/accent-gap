@@ -68,6 +68,19 @@ ps[ps.model == "small"].pivot_table(index=["group", "speaker"], columns="prompt"
 md("The personal word lists themselves:")
 code('pd.read_csv(R + "personal_word_lists.csv")[["speaker", "subgroup", "n_words", "words"]]')
 
+md("Personal mode on all three model sizes (all 40 speakers):")
+code("""e3 = pd.read_csv(R + "personal_mode_by_group.csv")
+e3[e3.group.str.startswith("All") & e3.prompt.isin(["personal", "control"])]""")
+md("Personal-mode design chosen on DEV speakers only (never on eval clips):")
+code('show("dev_tuning.csv"); print(open(R + "chosen_design.json").read())')
+
+md("## 4b. E4 (stretch): LoRA fine-tune on DEV speakers only (speaker-disjoint)")
+code("""import os
+if os.path.exists(R + "lora_vs_plain.csv"):
+    show("lora_vs_plain.csv")
+else:
+    print("E4 not run")""")
+
 md("## 5. Error analysis (whisper-small)")
 md("Words missed most often (substituted or deleted), per group:")
 code('show("missed_words_by_group.csv");')
