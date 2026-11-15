@@ -77,7 +77,12 @@ def build_clip_table():
         if len(d) < MIN_CLIPS_PER_SPEAKER:
             print(f"skip {spk} ({group}): only {len(d)} clips")
             continue
-        d = d.sort_values("clip_num").copy()      # conversation order
+        # Conversation order. Some conversations were recorded in parts
+        # (clip ids like EDACC-C31_P1-12, EDACC-C31_P2-3) and clip numbers
+        # restart in each part, so sort by (part, clip number).
+        d = d.copy()
+        d["part"] = d.clip_id.str.extract(r"_P(\d+)-")[0].fillna(0).astype(int)
+        d = d.sort_values(["part", "clip_num"])
         n_hist = int(round(len(d) * HISTORY_FRACTION))
         d["role"] = ["history"] * n_hist + ["eval_candidate"] * (len(d) - n_hist)
         d["group"], d["subgroup"] = group, sub
@@ -136,7 +141,7 @@ def main():
         clips.loc[idx, "role"] = "eval"
 
     cols = ["clip_id", "speaker", "group", "subgroup", "accent", "l1", "gender", "split",
-            "clip_num", "role", "duration", "ref"]
+            "part", "clip_num", "role", "duration", "ref"]
     clips[cols].to_csv(os.path.join(CACHE, "clips.csv"), index=False)
 
     ev = clips[clips.role == "eval"]
