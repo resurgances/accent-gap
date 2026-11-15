@@ -76,7 +76,7 @@ def highlight(base_words, other_words, color):
             out += [html.escape(w) for w in other_words[j1:j2]]
         else:
             if op in ("replace", "insert"):
-                out += [f'<mark style="background:{color};padding:0 2px;border-radius:3px">'
+                out += [f'<mark style="background:{color};color:#0b0b0b;padding:0 2px;border-radius:3px">'
                         f'{html.escape(w)}</mark>' for w in other_words[j1:j2]]
             if op in ("replace", "delete"):
                 out += [f'<s style="color:#a3a29c">{html.escape(w)}</s>' for w in base_words[i1:i2]]
@@ -114,7 +114,7 @@ def compare_html(standard, personal, reference=""):
     return (f"{ref_row}<table style='width:100%;border-collapse:collapse'><tr>"
             f"<th {cell}>{head_s}</th><th {cell}>{head_p}</th></tr>"
             f"<tr><td {cell}>{s_html}</td><td {cell}>{p_html}</td></tr></table>"
-            f"<p style='font-size:0.85em;color:#52514e'>{legend}</p>")
+            f"<p style='font-size:0.85em;opacity:0.75'>{legend}</p>")
 
 
 # ------------------------------------------------------------------ tab 1
@@ -135,16 +135,21 @@ def load_examples():
     if not (os.path.exists(side_path) and os.path.exists(lists_path)):
         return pd.DataFrame(), {}
     side = pd.read_csv(side_path, keep_default_na=False)
-    side = side[(side.ref_words >= 6) & (side.ref_words <= 30)]
     side = side[side.clip_id.apply(lambda c: os.path.exists(os.path.join(CACHE, "audio", c + ".npy")))]
-    picks = []
+    # 1) the clips discussed in the README (notes/failure_notes.csv) come first
+    notes_path = os.path.join(os.path.dirname(RESULTS), "notes", "failure_notes.csv")
+    noted = pd.read_csv(notes_path).clip_id.tolist() if os.path.exists(notes_path) else []
+    picks = [side.set_index("clip_id").loc[[c for c in noted if c in set(side.clip_id)]].reset_index()]
+    # 2) plus automatic picks per group (6-30 words long)
+    side = side[(side.ref_words >= 6) & (side.ref_words <= 30)]
     for g, d in side.groupby("group"):
         d = d.assign(gain=d.wer_plain - d.wer_personal)
         picks += [d.sort_values("gain", ascending=False).head(3),   # personal mode helped most
                   d.sort_values("gain").head(1),                    # personal mode hurt most
                   d[d.wer_plain > 0].sample(min(2, (d.wer_plain > 0).sum()), random_state=0)]  # typical errors
     ex = pd.concat(picks).drop_duplicates("clip_id")
-    ex["label"] = [f"{r.group} | {r.speaker} | {r.clip_id} | standard WER {r.wer_plain:.0f}%, personal {r.wer_personal:.0f}%"
+    ex["label"] = [("★ " if r.clip_id in noted else "") +
+                   f"{r.group} | {r.clip_id} | standard WER {r.wer_plain:.0f}%, personal {r.wer_personal:.0f}%"
                    for r in ex.itertuples()]
     lists = pd.read_csv(lists_path, keep_default_na=False)
     return ex.set_index("label"), dict(zip(lists.speaker, lists.words))

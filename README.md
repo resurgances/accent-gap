@@ -1,0 +1,287 @@
+# Accent Gap
+**Track:** Languages
+**Team:** Karan Daryanani
+
+> Every number below comes from a file in [`results/`](results/) produced by the code in this repo.
+> The file is named next to each number. Video demo: *(link to be added)*
+
+## The problem
+
+*(DRAFT. Karan: rewrite this in your own words.)*
+
+My parents speak Sindhi. When I dictate a text, Siri types it perfectly. When my mom
+dictates the same kind of message on the same phone, it comes out garbled, and Alexa
+often doesn't understand my parents at all. Speech-to-text is now how many people
+text, search and use their phones, so when it works worse for some accents, those
+people get a worse phone. They have to repeat themselves, correct every message, or
+give up on voice features. I wanted to measure how big this "accent gap" really is for
+South Asian-accented English in a modern open speech model, find out which words it
+gets wrong, and test whether a phone could cheaply adapt to one person ("mom mode").
+
+## What we built
+
+A measurement pipeline and a prototype "personal mode" around **OpenAI Whisper**, an AI
+speech-to-text model:
+
+1. **Accent-gap benchmark.** We run Whisper on 1,628 held-out clips (166.9 minutes) from 40
+   speakers in the public EdAcc corpus. That covers 8 South Asian, 15 native US/UK and 17
+   Nigerian/Jamaican/Spanish-accented speakers (`results/eval_set_summary.csv`). We report
+   word error rate (WER) per accent group, per sub-group and per speaker, with confidence
+   intervals.
+2. **Personal mode.** For each speaker we build a 40-word "personal word list" from the
+   *earlier* part of their conversation. We give it to Whisper as a text prompt and test on
+   the *later* part. A **loop guard** catches the repetition loops that prompts can
+   cause.
+3. **Error analysis.** Which words are missed, whether names and numbers fail more often,
+   how clip length matters, and the worst clips side by side with our best guess at why.
+4. **Demo** (`demo.py`, Gradio). Record or upload your voice and add an optional word list
+   to see Standard Whisper vs Personal mode side by side, with differences highlighted.
+   A second tab plays real EdAcc test clips, so it works without a microphone.
+
+**Who it's for:** people with South Asian accents, like my mom, who dictate everyday
+messages. The real target is the phone or speech-to-text maker, who could add a personal
+mode.
+
+**What goes in / what comes out (a real held-out example, `results/worst_examples.csv`):**
+- *In:* a 1.2-second clip from a Sinhalese-L1 speaker (EDACC-C10-84) + this speaker's word
+  list from earlier in the conversation (`play, played, used, chocolate, cricket, favorite, ...`)
+- *Out:* Standard Whisper: **"No, contrary to that."** Personal mode: **"No, I can't remember."**
+  The reference is "no I can't remember", so WER went from 80% to 0%.
+
+## What we added
+
+We built on the suggested "speech recognition across accents" project and added:
+- **Our own user:** South Asian-accented speakers dictating everyday messages, motivated by my mom.
+- **Our own question:** does per-speaker personalization close the accent gap?
+- **A leak-free design.** Each speaker's conversation is split in time order. The first 60% is
+  "history", and only its *text* is used to build the word list. The last 40% is the only thing
+  we score. No model ever transcribes a history clip.
+- **A control baseline.** We also give Whisper *someone else's* word list (a speaker of the same
+  accent group from a different conversation). This tells us whether gains come from
+  *personal* words or from prompting in general.
+- **A dev set for design choices.** When our first version failed, we chose the fix using 32
+  *other* EdAcc speakers (Irish, Scottish, Kenyan, South African, Italian, Vietnamese), not the
+  test speakers. Then we ran the chosen design once.
+- **Speaker-level bootstrap confidence intervals**, per-speaker results, and model-size comparison.
+
+## How it works
+
+```
+EdAcc (public, Hugging Face)
+  │  scan_metadata.py   read text columns only (no 7 GB download): speakers, accents, first languages
+  ▼
+prepare_data.py   pick speakers by accent / first language → sort each conversation in time order
+  │               first 60% = history (text only), last 40% = eval (≤100 clips/speaker, 1–30 s)
+  │               download only the needed audio chunks, resample to 16 kHz mono
+  ▼
+personal_words.py history text → drop stopwords → words said ≥2 times → top 40 = personal list
+  ▼
+run_transcribe.py Whisper (base / small / medium), language=English, on eval clips:
+  │                 plain  |  personal: prompt "Words I often use: w1, w2, ..."  |  control: someone else's list
+  │                 loop guard: if output compresses > 2.4× with zlib (a repetition loop) → use plain output
+  ▼
+analyze.py        Whisper's English normalizer on both texts → word alignment (jiwer)
+                  → WER per group / sub-group / speaker, 2,000× bootstrap resampling speakers,
+                  missed words, word types, clip length, worst examples → results/*.csv + *.png
+```
+
+- **Model:** `openai/whisper-small` for the main results (also base and medium), run locally
+  on a MacBook GPU (Apple MPS). The AI does the core job, speech → text. We never train it:
+  personal mode only changes the *prompt*, the text Whisper sees as "what was said before".
+- **Metric:** WER = (substituted + deleted + inserted words) / words actually said. Both texts
+  go through Whisper's English normalizer first, so "Okay." vs "OKAY" or "20" vs "twenty" is
+  not counted as an error.
+- **Groups:** South Asian = accent "Indian English" or first language Hindi/Urdu/Sinhalese/etc.
+  Native = accent and first language both Mainstream US or Southern British English.
+
+## Results
+
+### 1. The accent gap: on EdAcc, Whisper is NOT worse for South Asian speakers
+
+![WER by group](results/wer_by_group.png)
+
+Whisper-small, held-out clips (`results/wer_by_group.csv`, `results/accent_gap.csv`):
+
+| Group | Speakers | Clips | WER | 95% CI | × native WER (95% CI) |
+|---|---|---|---|---|---|
+| **South Asian English** | 8 | 356 | **20.6%** | 17.1–26.2 | **0.89** (0.69–1.20) |
+| ↳ Indian English accent | 4 | 265 | 19.3% | 16.0–26.7 | |
+| ↳ Urdu L1 | 2 | 63 | 25.9% | 25.4–27.0 | |
+| ↳ Sinhalese L1 | 2 | 28 | 18.4% | 10.1–34.8 | |
+| **Native US/UK English** | 15 | 507 | **23.1%** | 19.2–27.5 | 1 (reference) |
+| Nigerian English | 5 | 274 | 28.1% | 25.9–30.2 | 1.21 (1.01–1.47) |
+| Jamaican English | 6 | 204 | 37.6% | 24.4–58.9 | 1.63 (1.03–2.60) |
+| Spanish-accented English | 6 | 287 | 25.4% | 23.0–28.4 | 1.10 (0.90–1.37) |
+
+**Honest answer to our first question:** on EdAcc we found **no accent gap for South Asian
+speakers**. Their WER (20.6%) is slightly *lower* than native speakers' (23.1%), and the
+confidence interval for the ratio (0.69–1.20) includes 1, which means no difference. Gaps we
+*can* see are for Jamaican English (1.63×) and Nigerian English (1.21×). The spread *between
+speakers* is larger than between groups. South Asian speakers range from 10.1% to 34.8% WER,
+and native speakers from 3.3% to 39.1% (`results/wer_by_speaker.csv`).
+
+This does **not** mean my mom's experience is wrong. EdAcc's South Asian speakers are fluent,
+mostly young English speakers on video calls, two of whom describe their own accent as
+"American" (`results/dataset_overview.csv`). My mom is an older Sindhi speaker dictating on a
+phone, and Siri is not Whisper. See Limitations.
+
+### 2. Does a bigger model close the gap?
+
+![Model size](results/model_size.png)
+
+WER by model (`results/wer_by_group_all_systems.csv`, `results/accent_gap.csv`):
+
+| Group | whisper-base | whisper-small | whisper-medium | medium: × native (95% CI) |
+|---|---|---|---|---|
+| South Asian English | 25.7% | 20.6% | 18.0% | 0.96 (0.77–1.30) |
+| Native US/UK English | 29.0% | 23.1% | 18.7% | 1 |
+| Nigerian English | 39.0% | 28.1% | 26.5% | 1.42 (1.16–1.74) |
+| Jamaican English | 52.9% | 37.6% | 29.9% | 1.59 (1.07–2.32) |
+| Spanish-accented English | 41.5% | 25.4% | 25.5% | 1.36 (1.07–1.89) |
+
+Bigger models are better for everyone, but they **do not close the gaps that exist**. With
+medium, native speakers improve more than Nigerian and Spanish-accented speakers, so those
+ratios *grow* (Nigerian 1.21× → 1.42×, Spanish 1.10× → 1.36× from small to medium). Speed per
+clip: base 0.20 s, small 0.27 s, medium 1.14 s (`results/model_speed.csv`; measured while other
+jobs shared the GPU).
+
+### 3. Personal mode: a small gain, from *personal* words, but it does not close an accent gap
+
+![Personal mode](results/personal_mode.png)
+
+Whisper-small, final design (sentence prompt + 40 words + loop guard)
+(`results/personal_mode_by_group.csv`, `results/personal_vs_control.csv`):
+
+| Group | Standard | Personal mode | Gain (95% CI) | Control (someone else's list) | Personal beats control by (95% CI) |
+|---|---|---|---|---|---|
+| South Asian English | 20.6% | 19.3% | +1.3 (−1.1 to +4.6) | 21.6% | +2.3 (−0.3 to +6.7) |
+| Native US/UK English | 23.1% | 21.9% | +1.2 (−1.7 to +4.5) | 22.5% | +0.6 (−0.5 to +1.7) |
+| Nigerian English | 28.1% | 27.2% | +0.9 (−1.5 to +2.5) | 30.9% | +3.7 (+0.6 to +5.9) |
+| Jamaican English | 37.6% | 34.6% | +3.0 (−1.7 to +10.2) | 38.6% | +4.0 (−0.1 to +12.6) |
+| Spanish-accented English | 25.4% | 24.6% | +0.7 (−0.4 to +1.7) | 24.6% | −0.1 (−1.2 to +0.5) |
+| **All 40 speakers** | **25.5%** | **24.3%** | **+1.3 (−0.1 to +2.7)** | 26.1% | **+1.8 (+0.5 to +3.2)** |
+
+(Gain = WER points saved; positive = better. The CIs are paired: the same clips, resampling speakers.)
+
+What this shows:
+- **Personal mode helps a little in every group** (+0.7 to +3.0 WER points). Across all 40
+  speakers the gain is +1.3 points (5.0% relative). Its 95% CI just touches zero, and 21
+  speakers improved while 18 got worse.
+- **It is the *personal* words that help.** Someone else's list gives no gain overall (−0.5),
+  and the speaker's own list beats it by 1.8 points (95% CI +0.5 to +3.2, which excludes zero).
+- **It does not help South Asian speakers more than native speakers.** The difference in gain is
+  +0.1 points (95% CI −4.0 to +4.5), so there is no evidence either way
+  (`results/personal_mode_gain_comparison.csv`). And since we found no South Asian gap on EdAcc,
+  there was no gap for it to close.
+- Words that were in a speaker's list are missed less often. South Asian: 13.6% → 11.2% over
+  169 occurrences (`results/miss_rate_by_word_type.csv`).
+
+**Our first design failed, and we report it.** Version 1, a bare comma-separated list
+of 40 words, made WER *worse* in every group (South Asian −1.8, native −3.0, Jamaican −16.8 points;
+`personal_mode_by_group.csv`, rows `personal_v1`). Whisper copied the list format and fell into
+repetition loops like "no, no, no, ..." about 100 times. We picked the fix on the 32 dev speakers
+only (`results/dev_tuning.csv`). There, plain Whisper scored 21.9% WER, v1 24.9%, and the chosen
+sentence prompt + loop guard 21.0%. On the eval clips the loop guard replaced 7 of 1,628
+personal-mode outputs (`results/loop_guard_counts.csv`).
+
+### 4. Where it fails: side-by-side examples
+
+Errors by word type, whisper-small (`results/miss_rate_by_word_type.csv`):
+- **Rare words** (names, places, unusual words; low frequency in everyday English) are missed far
+  more often than common words. South Asian 49.5% vs 18.3%, native 43.9% vs 21.0%.
+- **Most errors are deletions** of small words in fast conversational speech: South Asian 12.8%
+  deletions vs 6.2% substitutions; native 13.9% vs 7.5% (`results/wer_by_group.csv`). The most-missed
+  words in every group are "i", "you", "the", "like" and "know" (`results/missed_words_by_group.csv`).
+  Whisper tends to write a cleaned-up sentence, while EdAcc transcribes every repeated "I I I".
+- **Short clips are much harder.** For 1–3 s clips WER is 25.9% (South Asian), 31.9% (native) and
+  59.8% (Jamaican). For 10–30 s clips all groups are between 19.2% and 24.0% (`results/wer_by_length.csv`).
+  Most of the gap for the other accents comes from short clips with little context.
+
+![WER vs clip length](results/wer_by_length.png)
+
+Real held-out clips (`results/worst_examples.csv`; "why" = our best guess, to be checked by listening):
+
+| Clip (group) | What was said (reference) | Standard Whisper | Personal mode | Why we think it failed |
+|---|---|---|---|---|
+| C10-84 (South Asian, Sinhalese L1) | no I can't remember | No, contrary to that. | No, I can't remember. | 1.2 s and quiet (−30.3 dB), so very little sound to go on; the prompt's context helped |
+| C07-217 (native US) | some of them are I can't really I don't have any at the top of my mind right now ... | `,` (only a comma) | Some of them are, I can't really, I don't have any at the top of my mind right now ... | Not an accent error: Whisper stopped decoding immediately on a 12.6 s clip; WER 100% → 8.9% with the prompt |
+| C41-129 (Nigerian) | peanuts burger can you make peanuts burger | Pinozboga, Kainmek Pinozboga. | Pinozburger, can make Pinozburger. | Whisper spelled the sounds as a new word; an unusual phrase in a 1.9 s clip with no context |
+| C52-312 (Jamaican) | me prefers Naruto more than Dragon Ball Z | I prefer to know what's off with my underground boundary. | I prefer to know what's off, with my android and battery. | Rare names + Jamaican Creole grammar; Whisper "corrects" toward common English phrases |
+| C09-358 (South Asian, Indian English) | I think we should also like | What? | **Words I often use.** | **Our method's failure:** on a short unclear clip, Whisper echoed our own prompt (1 of 1,628 clips) |
+| C09-362 (South Asian) | this call forty minutes about it | It's cause we've talked 40 minutes about that. | (same) | Possibly a *reference* error: Whisper's sentence may be what was actually said |
+
+Personal mode can also *hurt*. On EDACC-C05_P1-195 the standard output was nearly perfect
+("cool and stuff you know and I needed an extra jacket ... 26 is like what?", WER 10%), but personal
+mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side.csv`).
+
+### Limitations (please read)
+- **EdAcc is not my mom.** These are public speakers in relaxed video-call conversations, not
+  older Sindhi speakers dictating texts on a phone. Our results say nothing direct about Siri
+  or Alexa, which are different systems.
+- **Small groups.** Only 8 South Asian speakers exist in EdAcc that we could use: 4 with an Indian
+  English accent, 2 Urdu-L1 speakers who self-describe as American-accented, and 2 Sinhalese-L1.
+  No Sindhi speakers at all. That is why the confidence intervals are wide. "No gap found" is
+  not the same as "no gap exists".
+- **Conversation ≠ dictation.** In a conversation, the topic carries over from earlier to later,
+  which makes word lists from the same conversation unusually useful. Real dictation history may
+  help less.
+- **The reference transcripts are not perfect** (see C09-362), and EdAcc writes every disfluency
+  ("I I I"). Whisper often drops those, which counts as an error.
+- **One fix was chosen after seeing a failure on the eval clips.** We *noticed* v1's loops on
+  eval clips. The fix itself was *chosen* on separate dev speakers by a rule fixed in advance.
+- **Prompting is not training.** Personal mode cannot learn how someone pronounces words. It only
+  hints which words to expect.
+
+## What we'd do next
+1. **Real target users, with consent:** record (with permission) older South Asian-accented
+   speakers, including Sindhi speakers like my parents, dictating real messages on a phone.
+   Then measure the gap where we suspect it is largest.
+2. **Better personal lists:** use contacts, names and places from the user's own messages
+   (on-device and private) instead of conversation words. Names were the hardest word type.
+3. **Voice adaptation:** a small LoRA fine-tune on a few minutes of one person's speech
+   (speaker-adaptive training), compared against prompting on the same split.
+4. **Larger accent sets** (e.g. more South Asian speech corpora) to shrink the confidence intervals.
+
+## Sources
+- **Whisper** (OpenAI): Radford et al., "Robust Speech Recognition via Large-Scale Weak Supervision", 2022. Models `openai/whisper-base`, `-small`, `-medium`: https://huggingface.co/openai/whisper-small, code: https://github.com/openai/whisper (the 2.4 compression-ratio loop test comes from Whisper's decoding code)
+- **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc
+- **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); Gradio (demo); Jupyter.
+- **AI assistance:** Claude Code (Anthropic) was used as an AI coding assistant to write and debug the code and draft the documentation. All results were produced by running this code.
+
+---
+
+## Setup and how to run
+
+Tested on macOS (Apple Silicon M3 Pro) with Python 3.14. Uses the Apple GPU (MPS) if available, otherwise the CPU.
+
+```bash
+git clone <this repo> accent-gap && cd accent-gap
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+Reproduce everything (about 2 hours on an M3 Pro; every step is resumable, so just re-run it if interrupted):
+
+```bash
+cd src
+../.venv/bin/python scan_metadata.py      # EdAcc metadata → results/dataset_overview.csv
+../.venv/bin/python prepare_data.py       # choose speakers/clips, download about 1.3 GB of audio to data_cache/
+../.venv/bin/python personal_words.py     # personal word lists → results/personal_word_lists.csv
+cd ..
+./run_all.sh                              # Whisper base/small/medium, plain + v1 prompts
+./run_dev.sh && .venv/bin/python src/dev_tuning.py   # choose the prompt design on DEV speakers
+./run_final.sh                            # chosen design on the eval clips
+.venv/bin/python src/analyze.py           # all tables and charts in results/
+.venv/bin/python src/make_notebook.py && .venv/bin/jupyter nbconvert --to notebook --execute --inplace analysis.ipynb
+```
+
+Run the demo (after the steps above, so the example tab has clips):
+
+```bash
+.venv/bin/python demo.py
+```
+
+Repo map: `src/` = pipeline scripts, `results/` = every number and chart, `analysis.ipynb` = all
+tables and charts in one place, `demo.py` = Gradio demo, `LEARN.md` = plain-language explanation
+and judge Q&A, `notes/failure_notes.csv` = our hand-written explanations of example failures.
+Audio is never committed (`data_cache/` is git-ignored).

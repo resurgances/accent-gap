@@ -151,3 +151,111 @@ shrinks a lot. If the compression ratio is above 2.4, Whisper's own threshold,
 the output is treated as a failed decode. Our guard says: if personal-mode output
 looks like a loop, use the standard output instead. On a phone that means "re-run
 without the word list".
+
+---
+
+## Phase 4: the results, explained
+
+All numbers are whisper-small on the 1,628 held-out eval clips (40 speakers) unless stated.
+
+### E1: is there an accent gap? (`results/wer_by_group.csv`, `results/accent_gap.csv`)
+- South Asian English: **20.6%** WER (95% CI 17.1-26.2), 8 speakers
+- Native US/UK English: **23.1%** (19.2-27.5), 15 speakers
+- Nigerian 28.1%, Spanish-accented 25.4%, Jamaican 37.6% (CI 24.4-58.9, very wide)
+- Ratio South Asian / native = **0.89** (CI 0.69-1.20). The CI includes 1.0, so **we found no
+  gap** for South Asian speakers on EdAcc. Jamaican (1.63x) and Nigerian (1.21x) speakers do
+  show gaps whose CIs stay above 1.
+
+**How to say this to judges:** "My hypothesis was wrong for this dataset, and I'm reporting
+that. EdAcc's South Asian speakers are fluent young speakers on video calls, so it tests a
+different situation than my mom dictating on a phone."
+
+**Speakers differ more than groups do.** South Asian speakers range from 10.1% to 34.8% WER,
+native speakers from 3.3% to 39.1% (`results/wer_by_speaker.csv`). One US speaker (C07-A) has
+high WER because Whisper returned almost nothing for several of their clips.
+
+### E2: does a bigger model help? (`results/wer_by_group_all_systems.csv`)
+WER for base → small → medium: South Asian 25.7 → 20.6 → 18.0; native 29.0 → 23.1 → 18.7.
+Bigger is better for everyone. But for Nigerian and Spanish-accented speakers the *ratio* to
+native gets worse with medium (1.42x and 1.36x), because native speakers gain more. A bigger
+model is not a fix for accent gaps.
+
+### E3: personal mode (`results/personal_mode_by_group.csv`, `results/personal_vs_control.csv`)
+- Final design (sentence prompt, 40 words, loop guard): all 40 speakers go from 25.5% → 24.3%,
+  a gain of **1.3 points** (CI -0.1 to +2.7). It is a small gain and only borderline significant.
+- South Asian 20.6 → 19.3 (+1.3); native 23.1 → 21.9 (+1.2). The difference between those two
+  gains is +0.1 (CI -4.0 to +4.5), so there is **no evidence it helps South Asian speakers more**.
+- **Control** (someone else's list): 26.1% overall, slightly *worse* than no prompt. The own
+  list beats the control by **1.8 points (CI +0.5 to +3.2)**. This is our most solid finding:
+  *personal* words help, while random prompts do not.
+- v1 (a bare comma list) made things worse because of repetition loops (see Phase 3).
+
+### Error analysis (`results/miss_rate_by_word_type.csv`, `results/wer_by_length.csv`, `results/missed_words_by_group.csv`)
+- Rare words (names, places) are missed about 2-3x as often as common words (South Asian
+  49.5% vs 18.3%).
+- Most errors are **deletions** of small words ("i", "you", "like", "know") in fast,
+  overlapping conversation. Whisper writes clean sentences, while EdAcc writes every "I I I".
+- Short clips (1-3 s) are much worse. At 10-30 s, every group is between 19.2% and 24.0%.
+- Real failure examples, with our explanations: README section "Where it fails" and
+  `results/worst_examples.csv` (column `listen_check_needed` = you should listen to confirm).
+
+---
+
+## Likely judge questions (with honest answers)
+
+**1. "Your hypothesis was that Whisper is worse for South Asian accents. Did you prove it?"**
+No. On EdAcc, South Asian speakers had 20.6% WER vs 23.1% for native speakers, and the
+confidence interval of the ratio (0.69-1.20) includes "no difference". With only 8 South Asian
+speakers we can't rule out a gap either. What we *can* say is that on fluent, conversational,
+video-call English, Whisper-small did not show a large South Asian gap, while Jamaican and
+Nigerian English did.
+
+**2. "Then why does Siri fail for your mom?"**
+I don't know for sure, and my data can't answer it. Possible reasons: Siri is a different
+model; my mom is an older speaker whose first language is Sindhi, while EdAcc's South Asian speakers
+are young and fluent; and dictation on a phone is a different setting. Testing that would need
+consented recordings from speakers like her, which is my next step.
+
+**3. "Why resample speakers for the confidence interval, not clips?"**
+Clips from one person share the same voice, microphone and topic, so they are not independent.
+If I resampled clips, I'd pretend I had 356 independent South Asian data points when I really
+have 8 people, and the interval would be falsely narrow.
+
+**4. "How do you know you didn't leak test data into personal mode?"**
+Each speaker's conversation is split in time order. The word list uses only the text of the
+first 60%, and scoring uses only the last 40%. No model ever transcribes history clips.
+Design choices (prompt format, loop guard) were chosen on 32 *different* dev speakers. I also
+found and fixed a bug where conversation parts were mis-ordered, and re-ran everything.
+
+**5. "Isn't a 1.3-point gain tiny?"**
+Yes, it is about 5% fewer errors, and its CI just touches zero. The stronger result is the
+comparison with someone else's list: own list beats the control by 1.8 points (CI +0.5 to
++3.2). So the idea works a bit, but a word list is a weak form of personalization.
+
+**6. "What's the difference between prompting and fine-tuning?"**
+Prompting gives the model extra text at the start ("words I often use: ..."), and the model's
+weights don't change. Fine-tuning keeps training the model on new audio so the weights change.
+Fine-tuning could learn how a person *pronounces* words, but it needs their recordings, compute,
+and care to avoid breaking the model. Prompting is free and instant but can only hint which words
+to expect.
+
+**7. "Why did version 1 make things worse?"**
+A bare comma list ("cool, nice, food, ...") made Whisper continue in the same pattern, so on
+short replies it got stuck repeating ("no, no, no, ..." about 100 times). Each loop adds
+about 100 wrong words. We fixed it with Whisper's own loop detector (zlib compression ratio
+> 2.4 → fall back to normal output) and a sentence-style prompt, chosen on dev speakers.
+
+**8. "What is WER and why normalize?"**
+WER = (wrong + missing + extra words) / words actually said. We normalize both texts with
+Whisper's English normalizer (lowercase, no punctuation, "twenty" = "20", "colour" = "color",
+drop "um") so formatting differences don't count as recognition errors.
+
+**9. "What's your baseline?"**
+Plain Whisper with no prompt, on exactly the same clips. For personal mode there's a second
+baseline: the same prompt format with someone else's word list (the control).
+
+**10. "What's the AI here, did you just call an API?"**
+The AI is OpenAI's Whisper, a neural network that turns audio into text. It runs locally on my
+laptop (no API). My contributions are the evaluation design (groups, leak-free split, bootstrap
+CIs, control, dev set), the personal-mode method and loop guard, the error analysis, and the
+demo. I used Claude Code as a coding assistant, and the README credits it.
