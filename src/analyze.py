@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 from wordfreq import zipf_frequency
 
-from common import RESULTS, load_clip, normalize
+from common import CACHE, RESULTS, load_clip, normalize
 from metrics import (bootstrap_diff_of_gains, bootstrap_paired_diff, bootstrap_ratio,
                      bootstrap_wer, load_eval_clips, pooled_wer, read_hyps, score_system,
                      with_loop_guard)
@@ -263,6 +263,17 @@ def main():
     if d4 is not None:
         systems["small-lora_plain"] = d4
     print("systems scored:", list(systems))
+
+    # ---- Totals of the evaluation and dev sets (quoted in the README)
+    allc = pd.read_csv(os.path.join(CACHE, "clips.csv"))
+    tot = []
+    for name, role, d in [("eval (40 speakers in 5 groups)", "eval", allc[allc.group != "DEV"]),
+                          ("dev (design choices only)", "dev", allc[allc.group == "DEV"])]:
+        r = d[d.role == role]
+        tot.append({"set": name, "speakers": r.speaker.nunique(), "clips": len(r),
+                    "minutes": round(r.duration.sum() / 60, 1),
+                    "history_clips_text_only": int((d.role == "history").sum())})
+    save(pd.DataFrame(tot), "set_totals.csv")
 
     # ---- E1 + all systems: WER per group / subgroup / speaker
     wt = pd.concat([wer_table(df, s) for s, df in systems.items()])

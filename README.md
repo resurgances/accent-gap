@@ -25,7 +25,7 @@ speech-to-text model:
 
 1. **Accent-gap benchmark.** We run Whisper on 1,628 held-out clips (166.9 minutes) from 40
    speakers in the public EdAcc corpus. That covers 8 South Asian, 15 native US/UK and 17
-   Nigerian/Jamaican/Spanish-accented speakers (`results/eval_set_summary.csv`). We report
+   Nigerian/Jamaican/Spanish-accented speakers (`results/set_totals.csv`, `results/eval_set_summary.csv`). We report
    word error rate (WER) per accent group, per sub-group and per speaker, with confidence
    intervals.
 2. **Personal mode.** For each speaker we build a 40-word "personal word list" from the
@@ -204,7 +204,7 @@ though the margin is only significant for small.
 ### 3b. Stretch (E4): a quick LoRA fine-tune made things worse
 
 We fine-tuned whisper-small with LoRA, a small set of extra trainable weights (0.7% of the model),
-for one epoch. Training used 1,254 clips from the 32 dev speakers only, so none of the 40
+for one epoch. Training used 1,254 clips from the 32 dev speakers only (`results/lora_training.csv`), so none of the 40
 evaluation speakers were seen (speaker-disjoint; `src/lora_finetune.py`). On the same eval clips
 (`results/lora_vs_plain.csv`, `results/insertions_by_system.csv`):
 

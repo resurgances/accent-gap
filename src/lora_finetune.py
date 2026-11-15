@@ -64,6 +64,10 @@ def main():
     data = training_clips()
     print(f"training on {len(data)} clips from {data.speaker.nunique()} DEV speakers, "
           f"{data.duration.sum() / 60:.1f} minutes")
+    pd.DataFrame([{"train_clips": len(data), "train_speakers": data.speaker.nunique(),
+                   "train_minutes": round(data.duration.sum() / 60, 1), "epochs": EPOCHS,
+                   "batch": BATCH, "lr": LR, "lora_rank": 16}]).to_csv(
+        os.path.join(ROOT, "results", "lora_training.csv"), index=False)
 
     processor = WhisperProcessor.from_pretrained("openai/whisper-small")
     processor.tokenizer.set_prefix_tokens(language="english", task="transcribe")
