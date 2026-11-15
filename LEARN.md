@@ -232,6 +232,40 @@ The demo uses **three AI steps**, all running on the laptop:
    languages, including Sindhi (`snd_Arab`). We translate one sentence at a time, because when we
    tested it on two sentences at once it dropped the first sentence in French.
 
+4. **Speaking the translation in your voice (Chatterbox Multilingual, Resemble AI).** This is
+   *voice cloning*. The model listens to a few seconds of your real recording and turns it into a
+   "speaker embedding", a list of numbers that describes what your voice sounds like (pitch, tone,
+   texture). It then generates new speech for the translated text, steered by those numbers. No
+   training happens: it copies the voice in one go ("zero-shot"). It lives in a separate env
+   (`.venv-tts`) because it needs older library versions; `src/voice_worker.py` runs there, and
+   `demo.py` talks to it through `src/voice.py`.
+5. **Checking the spoken translation.** After generating, Whisper-medium *listens* to the fake
+   audio, and we compare what it heard with the text it was supposed to say (character error rate:
+   the share of characters that differ). If a part is more than 15% off, we generate it again with
+   a different random seed, up to 3 times, and keep the best. We use medium, not small, as the
+   listener: on a Hindi test, small misheard so much that good audio looked bad.
+
+**What we measured about the voice** (`results/voice_check_summary.csv`, 30 runs, README 3c):
+French and Spanish came out almost exactly (2.2% and 1.8% character mismatch after retries).
+Hindi is weaker (19.4% on average), and in 2 of 10 runs it still didn't match after 3 tries. For
+the voice, generated speech scored 0.84 against a different real clip of the same speaker, the
+same as two real clips of that speaker (0.84), and much higher than two different speakers (0.65).
+But the scoring encoder is the same one the voice model uses, so it may be too kind, and no
+person listened to judge it.
+
+**Two bugs we hit and fixed:** (1) a library printed a status line into the channel that
+`demo.py` reads JSON replies from, which crashed it. Now the worker sends all prints to stderr.
+(2) the first evaluation run slowed to over an hour per clip. The voice model was allowed to
+generate up to 40 s of audio for any sentence, and Apple-GPU memory piled up until the Mac used
+35 GB of swap. Fix: cap the length based on the text's length and free GPU memory after every
+request (the same kind of memory fix as the LoRA run). That wasn't enough on its own: in the
+live demo, one long French sentence still made the voice model hold 40.6 GB of GPU memory. So the
+worker now checks its GPU memory after every request and restarts itself if it's over 8 GB.
+Keep recordings short (one or two sentences) for the smoothest demo.
+
+**Ethics:** voice cloning can be misused. The demo labels the audio as AI-generated, the model adds
+an invisible watermark, and the UI says to only copy a voice with that person's permission.
+
 **Important honesty point:** we measured speech-to-text accuracy, not translation quality or
 language-detection accuracy. In the demo those are prototype features, and the README says so.
 Also, the learned words come from the model's own earlier output, so if it mishears a word twice,
@@ -302,7 +336,20 @@ tune the prompt for each model, or use a different method (like fine-tuning).
 Whisper first writes down the speech in the language you spoke, then Meta's NLLB-200 model
 translates the text. We did not measure translation quality, so I can't claim it's accurate.
 I only checked a few sentences by eye. Errors can stack: if Whisper mishears a word, the
-translation will be wrong too.
+translation will be wrong too. What I *did* measure is the next step: whether the spoken audio
+says the translated text (French 2.2%, Spanish 1.8%, Hindi 19.4% character mismatch after retries).
+
+**13. "Is it really your voice? How do you know?"**
+It's a copy made by Resemble AI's Chatterbox model from a few seconds of the recording. I scored it
+with speaker embeddings: generated speech vs a different real clip of the same speaker = 0.84,
+the same as two real clips of that speaker (0.84), and higher than two different people (0.65) in
+all 30 runs. Honest caveat: that scorer is the same encoder the voice model uses, so it could be
+too kind, and I didn't run a human listening test. It also can't speak Sindhi or Urdu yet.
+
+**14. "Isn't voice cloning dangerous?"**
+Yes, it can be misused for scams. The demo only copies the voice of the person who just recorded,
+labels the result as AI-generated, and the model adds an invisible watermark. For EdAcc speakers, it
+only says a translation of what they actually said. A real product would need explicit consent.
 
 **12. "What's the AI here, did you just call an API?"**
 The AI is OpenAI's Whisper, a neural network that turns audio into text. It runs locally on my

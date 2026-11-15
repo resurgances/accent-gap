@@ -7,6 +7,9 @@ Tab 1 "Speak": record yourself. When you stop recording, it automatically:
      word list from what you said EARLIER in this session and uses it as a hint
      (our "personal mode", same recipe as in the README, no typing needed)
   3. translates it into the language you picked (NLLB-200 translation model)
+  4. SPEAKS the translation in your own voice (Chatterbox Multilingual voice cloning),
+     then checks it: Whisper listens to the generated speech and we compare what it
+     heard with the translation; parts that don't match are regenerated (src/voice.py)
 Tab 2 "Real EdAcc examples": real held-out clips from the public EdAcc dataset,
   so the demo works without a microphone (needs data_cache/ from the pipeline).
 
@@ -27,6 +30,7 @@ from common import (CACHE, RESULTS, SAMPLE_RATE, get_device, load_clip,  # noqa:
                     load_whisper, looks_like_loop, normalize, transcribe)
 from personal_words import personal_list  # noqa: E402
 from run_transcribe import make_prompt  # noqa: E402
+import voice  # noqa: E402
 
 # Personal-mode design from the README (chosen on DEV speakers): sentence prompt, 40 words,
 # loop guard. It helped whisper-small a little but HURT whisper-medium in our tests,
@@ -60,7 +64,10 @@ NAME_TO_CODE = {v: k for k, v in LANG_NAMES.items()}
 NOTE = ("**Prototype.** Built for the Veritas AI Hackathon 2026 (AI + Languages). Speech-to-text = "
         "OpenAI Whisper. Translation = Meta NLLB-200. *Learn my words* = our personal mode: it remembers words "
         "you used earlier in this session and gives them to Whisper as a hint (no voice training). In our tests "
-        "this gave a small improvement with whisper-small. Translation quality was not measured by us.")
+        "this gave a small improvement with whisper-small. Translation quality was not measured by us. "
+        "*Spoken translation* = Resemble AI Chatterbox Multilingual: it copies the voice from the recording; "
+        "the audio is **AI-generated** and invisibly watermarked by the model. Only copy a voice with that "
+        "person's permission.")
 
 
 # ------------------------------------------------------------------ models (loaded on first use)
@@ -190,12 +197,74 @@ def compare_html(standard, personal, reference="", left="Standard Whisper", righ
             f"<p style='font-size:0.85em;opacity:0.75'>{legend}</p>")
 
 
+# ------------------------------------------------------------------ spoken translation
+def listen(x, lang):
+    """Accuracy check: Whisper-medium transcribes the generated speech in the target language.
+    (Medium, not small: on a Hindi test, small misheard much more, which made good audio look bad.)"""
+    import torch
+    processor, model = whisper("medium")
+    heard = transcribe(processor, model, [x], language=lang)[0]
+    if torch.backends.mps.is_available():
+        torch.mps.empty_cache()  # free Apple-GPU memory between checks
+    return heard
+
+
+def voice_anchor():
+    """Reference numbers for the voice-match score, measured by src/voice_check.py (if it was run)."""
+    path = os.path.join(RESULTS, "voice_check_summary.csv")
+    if not os.path.exists(path):
+        return ""
+    d = pd.read_csv(path).set_index("measure").value
+    same, diff = float(d["real_same_speaker_similarity_mean"]), float(d["real_different_speaker_similarity_mean"])
+    return (f" For comparison, on EdAcc: two *real* recordings of the same speaker scored "
+            f"{same:.2f} on average, two different speakers {diff:.2f}.")
+
+
+def speak_translation(ref_audio, text, target):
+    """Returns (audio for gr.Audio, markdown report)."""
+    if not text or target == NO_TRANSLATION or text.startswith("(Sorry"):
+        return None, ""
+    lang = NAME_TO_CODE[target]
+    if not voice.available():
+        return None, "Spoken translation needs the voice env: see README (`.venv-tts`)."
+    if lang not in voice.SUPPORTED:
+        names = {**LANG_NAMES, "da": "Danish", "el": "Greek", "fi": "Finnish", "he": "Hebrew",
+                 "ms": "Malay", "no": "Norwegian", "sv": "Swedish"}
+        return None, (f"The voice model can't speak {target} (the text translation above still works). "
+                      "It speaks: " + ", ".join(sorted(names[c] for c in voice.SUPPORTED)) + ".")
+    sr, audio, report = voice.speak(ref_audio, text, lang, listen)
+    o = voice.overall(report)
+    warn = ("\n\n**Warning: some of it still didn't match after 3 tries, so don't trust this audio.**"
+            if any(r["cer"] > voice.MAX_CER for r in report) else "")
+    md = (f"**Accuracy check:** Whisper listened to the spoken translation and heard:  \n*{html.escape(o['heard'])}*  \n"
+          f"Character mismatch with the translation: **{100 * o['cer']:.0f}%** "
+          f"(parts above {100 * voice.MAX_CER:.0f}% are regenerated, up to {voice.MAX_TRIES} tries; "
+          f"{o['attempts']} generation(s) for {o['chunks']} part(s)).  \n"
+          f"**Voice match:** {o['voice_similarity']:.2f} (1.0 = same voice fingerprint as the recording).{voice_anchor()}"
+          f"{warn}  \n<sub>This checks that the audio says the translated text. It does not check that the "
+          f"translation itself is right.</sub>")
+    return (sr, audio), md
+
+
+def voice_sample(clips):
+    """The voice to copy: newest recording first, plus earlier ones, up to ~10 s."""
+    out, total = [], 0
+    for c in reversed(clips):
+        out.append(c)
+        total += len(c)
+        if total >= 10 * SAMPLE_RATE:
+            break
+    return np.concatenate(out)
+
+
 # ------------------------------------------------------------------ tab 1: speak
-def run_speak(audio, target, model_label, learn, history):
+def run_speak(audio, target, model_label, learn, history, voice_clips):
     """Runs automatically when you stop recording (or upload a file)."""
     history = history or []
+    voice_clips = voice_clips or []
     if audio is None:
-        return "Record something first.", "", "", ", ".join(personal_list(history)) or "(none yet)", "", history
+        return ("Record something first.", "", "", ", ".join(personal_list(history)) or "(none yet)", "",
+                history, voice_clips)
     size = MODELS[model_label]
     x = to_16k_mono(audio)
     lang = detect_language(size, x)
@@ -218,13 +287,20 @@ def run_speak(audio, target, model_label, learn, history):
         compare = ""
 
     history = history + [said]  # remember this for next time
+    voice_clips = voice_clips + [x]  # your voice, to copy when speaking the translation
     detected = f"Detected language: **{lang_name}**" + (f"  \n{note}" if note else "")
     return (said, translate(said, lang, target), detected, ", ".join(personal_list(history)) or "(none yet)",
-            compare, history)
+            compare, history, voice_clips)
+
+
+def speak_mine(translation, target, speak_it, voice_clips):
+    if not speak_it or not voice_clips:
+        return None, ""
+    return speak_translation(voice_sample(voice_clips), translation, target)
 
 
 def reset_learning():
-    return [], "(none yet)", ""
+    return [], [], "(none yet)", ""
 
 
 # ------------------------------------------------------------------ tab 2: EdAcc examples
@@ -255,13 +331,27 @@ def load_examples():
 
 
 EXAMPLES, WORD_LISTS = load_examples()
+CLIPS = pd.read_csv(os.path.join(CACHE, "clips.csv")) if os.path.exists(os.path.join(CACHE, "clips.csv")) else None
+
+
+def speaker_voice(clip_id, speaker):
+    """Voice to copy for an EdAcc clip: the clip itself, plus other cached clips of the
+    same speaker if it is shorter than voice.MIN_REF_SECONDS. (Audio only, for the voice.)"""
+    x = [load_clip(clip_id)]
+    if CLIPS is not None:
+        for c in CLIPS[(CLIPS.speaker == speaker) & (CLIPS.clip_id != clip_id)].clip_id:
+            if sum(map(len, x)) >= voice.MIN_REF_SECONDS * SAMPLE_RATE:
+                break
+            if os.path.exists(os.path.join(CACHE, "audio", c + ".npy")):
+                x.append(load_clip(c))
+    return np.concatenate(x)[: 10 * SAMPLE_RATE]
 
 
 def show_example(label):
     if not label:
-        return None, "", "", "", ""
+        return None, "", "", "", "", None, ""
     r = EXAMPLES.loc[label]
-    return (SAMPLE_RATE, load_clip(r.clip_id)), r.reference, WORD_LISTS.get(r.speaker, ""), "", ""
+    return (SAMPLE_RATE, load_clip(r.clip_id)), r.reference, WORD_LISTS.get(r.speaker, ""), "", "", None, ""
 
 
 def run_example(label, target):
@@ -273,11 +363,19 @@ def run_example(label, target):
     return panel, translate(personal, "en", target)
 
 
+def speak_example(label, translation, target, speak_it):
+    if not label or not speak_it:
+        return None, ""
+    r = EXAMPLES.loc[label]
+    return speak_translation(speaker_voice(r.clip_id, r.speaker), translation, target)
+
+
 # ------------------------------------------------------------------ UI
 with gr.Blocks(title="Accent Gap") as demo:
     gr.Markdown("# Accent Gap: speak in your own accent, get your words (in any language)")
     gr.Markdown(NOTE)
     history = gr.State([])
+    voice_clips = gr.State([])  # your recordings this session (the voice to copy)
 
     with gr.Tab("Speak"):
         gr.Markdown("Press record, talk, press stop. It transcribes automatically. "
@@ -289,23 +387,28 @@ with gr.Blocks(title="Accent Gap") as demo:
                 target = gr.Dropdown(TARGETS, value="French", label="Translate to")
                 model_choice = gr.Radio(list(MODELS), value=list(MODELS)[0], label="Speech model")
                 learn = gr.Checkbox(value=True, label="Learn my words as I talk (personal mode)")
+                speak_it = gr.Checkbox(value=True, label="Speak the translation in my voice")
                 with gr.Row():
                     again = gr.Button("Transcribe again", variant="secondary")
                     reset = gr.Button("Forget learned words", variant="secondary")
             with gr.Column():
                 said_out = gr.Textbox(label="What you said", lines=3)
                 trans_out = gr.Textbox(label="Translation", lines=3)
+                voice_out = gr.Audio(label="Translation spoken in your voice (AI-generated)", autoplay=True,
+                                     interactive=False)
+                voice_info = gr.Markdown()
                 lang_out = gr.Markdown()
                 learned_out = gr.Textbox(label="Words it has learned from you so far", value="(none yet)",
                                          interactive=False)
                 with gr.Accordion("Compare: without vs with learned words", open=False):
                     cmp_out = gr.HTML()
-        inputs = [audio_in, target, model_choice, learn, history]
-        outputs = [said_out, trans_out, lang_out, learned_out, cmp_out, history]
-        audio_in.stop_recording(run_speak, inputs, outputs)
-        audio_in.upload(run_speak, inputs, outputs)
-        again.click(run_speak, inputs, outputs)
-        reset.click(reset_learning, None, [history, learned_out, cmp_out])
+        inputs = [audio_in, target, model_choice, learn, history, voice_clips]
+        outputs = [said_out, trans_out, lang_out, learned_out, cmp_out, history, voice_clips]
+        # first the text (fast), then the spoken translation (slower)
+        for event in (audio_in.stop_recording, audio_in.upload, again.click):
+            event(run_speak, inputs, outputs).then(
+                speak_mine, [trans_out, target, speak_it, voice_clips], [voice_out, voice_info])
+        reset.click(reset_learning, None, [history, voice_clips, learned_out, cmp_out])
 
     with gr.Tab("Real EdAcc examples (no mic needed)"):
         if len(EXAMPLES) == 0:
@@ -316,15 +419,23 @@ with gr.Blocks(title="Accent Gap") as demo:
                         "★ = clips discussed in the README.")
             pick = gr.Dropdown(list(EXAMPLES.index), label="Choose a clip")
             ex_target = gr.Dropdown(TARGETS, value="French", label="Translate to")
+            ex_speak = gr.Checkbox(value=True, label="Speak the translation in the speaker's voice")
             ex_audio = gr.Audio(label="Clip", type="numpy", interactive=False)
             ex_ref = gr.Textbox(label="Reference transcript (written by a human)")
             ex_words = gr.Textbox(label="Words learned from earlier in this conversation (automatic)")
-            ex_go = gr.Button("Run Standard vs With learned words", variant="primary")
+            ex_go = gr.Button("Run: transcribe, translate, speak", variant="primary")
             ex_cmp = gr.HTML()
             ex_trans = gr.Textbox(label="Translation (of the 'with learned words' text)")
-            pick.change(show_example, pick, [ex_audio, ex_ref, ex_words, ex_cmp, ex_trans])
-            ex_go.click(run_example, [pick, ex_target], [ex_cmp, ex_trans])
+            ex_voice = gr.Audio(label="Translation spoken in this speaker's voice (AI-generated)", autoplay=True,
+                                interactive=False)
+            ex_voice_info = gr.Markdown()
+            pick.change(show_example, pick, [ex_audio, ex_ref, ex_words, ex_cmp, ex_trans, ex_voice, ex_voice_info])
+            ex_go.click(run_example, [pick, ex_target], [ex_cmp, ex_trans]).then(
+                speak_example, [pick, ex_trans, ex_target, ex_speak], [ex_voice, ex_voice_info])
 
 if __name__ == "__main__":
     whisper("small")  # load the fast model up front so the first recording is quick
+    if voice.available():
+        voice._worker()  # start the voice model now too (takes ~30 s)
+        whisper("medium")  # used to check the spoken translation
     demo.launch()

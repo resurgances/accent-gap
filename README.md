@@ -42,11 +42,19 @@ speech-to-text model:
    - It **translates** the text into one of 30 languages, including Sindhi, Hindi, Urdu and French,
      with Meta's NLLB-200 translation model. A Scottish-accented English sentence can come out in
      French, or my mom's English in Sindhi.
+   - It **speaks the translation in your own voice**, copied from your recording by Resemble AI's
+     Chatterbox Multilingual voice-cloning model (23 languages, including French, Spanish, Hindi and
+     Arabic, but not Sindhi or Urdu). It then **checks the audio**: Whisper-medium listens to the
+     spoken translation, and any part whose characters differ from the translation by more than 15%
+     is generated again, up to 3 times. The demo shows what Whisper heard, the mismatch, and a
+     voice-match score. The audio is AI-generated and carries the model's invisible watermark.
    - A second tab plays real EdAcc test clips side by side (standard vs learned words, mistakes
-     highlighted), so it works without a microphone.
+     highlighted), translates them and speaks the translation in that EdAcc speaker's voice, so it
+     works without a microphone.
 
-   We did **not** measure translation quality or language detection accuracy. Those parts are
-   prototype features, and all measured results below are about English speech-to-text.
+   We did **not** measure translation quality or language detection accuracy. We *did* measure
+   whether the spoken audio says the translated text and how close the voice is (section 3c).
+   Everything else measured below is about English speech-to-text.
 
 **Who it's for:** people with South Asian accents, like my mom, who dictate everyday
 messages. The real target is the phone or speech-to-text maker, who could add a personal
@@ -230,6 +238,39 @@ deletions fell from 13.9% to 5.3% of words. But it also started repeating words 
 overall WER got worse. This was a short, untuned run, so it shows that a naive fine-tune is not
 an easy win. It does not show that fine-tuning cannot work.
 
+### 3c. Demo check: is the spoken translation correct, and does it sound like the speaker?
+
+We ran the demo's exact pipeline (`src/voice_check.py`) on 10 held-out EdAcc clips (2 per group,
+9 speakers, chosen at random) × 3 languages = 30 spoken translations
+(`results/voice_check.csv`, `results/voice_check_summary.csv`).
+
+**Does the audio say the translated text?** Whisper-medium listened to each spoken translation,
+and we measured the character mismatch (CER) against the text it was supposed to say:
+
+| | First try | After up to 3 tries | Runs still above 15% |
+|---|---|---|---|
+| French | 8.6% | 2.2% | 0 of 10 |
+| Spanish | 1.8% | 1.8% | 0 of 10 |
+| Hindi | 25.1% | 19.4% (median 10.9%) | **2 of 10** |
+
+French and Spanish came out almost word for word. Hindi is clearly weaker: in 2 of 10 runs, the
+audio still didn't match after 3 tries. In one, the voice model kept babbling after a sentence
+that ended in "...", and the demo shows a "don't trust this audio" warning when that happens.
+Part of the Hindi mismatch is Whisper's own spelling (हूँ vs हूं), so the true error is somewhat lower
+than measured, but we can't say by how much.
+
+**Does it sound like the speaker?** Voice match = cosine similarity between voice "fingerprints"
+(speaker embeddings, 1.0 = identical). Generated speech vs a *different* real clip of the same
+speaker scored **0.84** on average. Two real clips of the same speaker scored **0.84**, and real
+clips of two different speakers scored **0.65**. In all 30 runs, the generated voice was closer to
+the speaker's real voice than a different speaker's voice was. Caveat: the voice encoder used to
+score this is the same one the voice model is guided by, so it may flatter the result. **No human
+listening test was done.**
+
+A spoken translation took 18 s to make on average, for 5.1 s of audio. We still did **not**
+measure whether the translation itself is correct: this check only confirms that the audio says
+what NLLB wrote.
+
 ### 4. Where it fails: side-by-side examples
 
 Errors by word type, whisper-small (`results/miss_rate_by_word_type.csv`):
@@ -275,6 +316,9 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
   ("I I I"). Whisper often drops those, which counts as an error.
 - **One fix was chosen after seeing a failure on the eval clips.** We *noticed* v1's loops on
   eval clips. The fix itself was *chosen* on separate dev speakers by a rule fixed in advance.
+- **The spoken translation is heavy.** On our Mac, one long sentence once made the voice model
+  hold 40.6 GB of GPU memory, which slowed the whole computer until the worker restarted itself
+  (it now does that automatically above 8 GB). Short recordings work best.
 - **Prompting is not training.** Personal mode cannot learn how someone pronounces words. It only
   hints which words to expect.
 
@@ -284,15 +328,18 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
    Then measure the gap where we suspect it is largest.
 2. **Better personal lists:** use contacts, names and places from the user's own messages
    (on-device and private) instead of conversation words. Names were the hardest word type.
-3. **Voice adaptation done properly:** our quick LoRA run (E4) learned to loop. Next we'd try a
+3. **Spoken translation:** a human listening test (do people think it sounds like the speaker,
+   and is it understandable?), Sindhi and Urdu voices, and a real translation-quality check.
+4. **Voice adaptation done properly:** our quick LoRA run (E4) learned to loop. Next we'd try a
    per-speaker LoRA on a few minutes of one person's speech, with a validation set, a smaller
    learning rate and the loop guard, compared against prompting on the same split.
-4. **Larger accent sets** (e.g. more South Asian speech corpora) to shrink the confidence intervals.
+5. **Larger accent sets** (e.g. more South Asian speech corpora) to shrink the confidence intervals.
 
 ## Sources
 - **Whisper** (OpenAI): Radford et al., "Robust Speech Recognition via Large-Scale Weak Supervision", 2022. Models `openai/whisper-base`, `-small`, `-medium`: https://huggingface.co/openai/whisper-small, code: https://github.com/openai/whisper (the 2.4 compression-ratio loop test comes from Whisper's decoding code)
 - **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc (license: CC BY-SA 4.0; the reference transcripts copied into `results/` come from EdAcc and are shared under the same license, no audio is redistributed)
-- **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); `peft` (LoRA, E4); Gradio (demo); Jupyter.
+- **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); `peft` (LoRA, E4); Gradio (demo); `uv` (creates the demo's voice env); Jupyter.
+- **Chatterbox Multilingual** voice-cloning text-to-speech (demo only), Resemble AI, `chatterbox-tts` 0.1.7, model `ResembleAI/chatterbox` (MIT license): https://github.com/resemble-ai/chatterbox . Its output carries Resemble's Perth watermark.
 - **NLLB-200** translation model (demo only), Meta AI: NLLB Team, "No Language Left Behind", 2022. Model `facebook/nllb-200-distilled-600M` (license CC BY-NC 4.0, non-commercial): https://huggingface.co/facebook/nllb-200-distilled-600M
 - **AI assistance:** Claude Code (Anthropic) was used as an AI coding assistant to write and debug the code and draft the documentation. All results were produced by running this code.
 
@@ -327,6 +374,16 @@ Run the demo (after the steps above, so the example tab has clips):
 
 ```bash
 .venv/bin/python demo.py
+```
+
+The spoken translation needs a second env, because the voice model pins library versions that
+clash with the main one (it downloads Python 3.11 and about 3 GB of model weights the first time).
+Without it the demo still works, but shows text only:
+
+```bash
+.venv/bin/uv venv .venv-tts --python 3.11
+.venv/bin/uv pip install --python .venv-tts/bin/python -r requirements-tts.txt
+.venv/bin/python src/voice_check.py      # optional: measures the spoken translation → results/voice_check*.csv
 ```
 
 Repo map: `src/` = pipeline scripts, `results/` = every number and chart, `analysis.ipynb` = all

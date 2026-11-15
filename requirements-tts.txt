@@ -1,0 +1,7 @@
+# Separate env for the demo's spoken translation (voice cloning). It pins library
+# versions that clash with the main .venv, so it lives in .venv-tts:
+#   .venv/bin/pip install uv==0.13.8
+#   .venv/bin/uv venv .venv-tts --python 3.11
+#   .venv/bin/uv pip install --python .venv-tts/bin/python -r requirements-tts.txt
+chatterbox-tts==0.1.7
+setuptools==80.10.2   # the watermarker imports pkg_resources, removed in setuptools 81

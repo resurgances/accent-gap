@@ -15,15 +15,17 @@ Times are targets. Read it in your own voice and change the words so they sound 
 ### 0:15–1:15 · Demo (60 s)
 **On screen:** the Gradio demo.
 
-1. **(0:15)** Tab "Speak", with "Translate to" set to **Sindhi**. Record yourself, for example
+1. **(0:15)** Tab "Speak", with "Translate to" set to **Hindi** (the voice model can't speak
+   Sindhi or Urdu yet, so Hindi is the closest). Record yourself, for example
    "Tell Ammi I'll pick up the biryani from Karachi Kitchen at six", and press stop.
-   > "I just talk. It detects that I'm speaking English, writes down what I said, and translates
-   > it into Sindhi, my parents' language. I don't type anything."
+   > "I just talk. It detects that I'm speaking English, writes down what I said, translates it,
+   > and then says it back in Hindi *in my own voice*. Then it checks itself: Whisper listens to
+   > the audio, and if it doesn't match the translation, it tries again."
 2. **(0:30)** Record 2–3 more sentences, then point at "Words it has learned from you so far".
    > "The more I talk, the more of my words it learns. It gives them to the AI, OpenAI's Whisper,
    > as a hint for next time. That's my personal mode."
 3. **(0:40)** Tab "Real EdAcc examples". Pick **★ EDACC-C10-84** (Sinhalese L1), press play, then
-   "Run Standard vs With learned words".
+   "Run: transcribe, translate, speak" (it also says the translation in that speaker's voice).
    > "On a real clip from the public EdAcc dataset, standard Whisper writes 'No, contrary to that'.
    > With words learned from earlier in that conversation, it gets 'No, I can't remember' exactly
    > right. Mistakes are highlighted."
@@ -50,4 +52,4 @@ Times are targets. Read it in your own voice and change the words so they sound 
 > word list."
 
 ---
-Credits slide (optional, 3 s): "Whisper (OpenAI) · NLLB-200 (Meta) · EdAcc (University of Edinburgh) · Hugging Face · Claude Code (Anthropic) as coding assistant"
+Credits slide (optional, 3 s): "Whisper (OpenAI) · NLLB-200 (Meta) · Chatterbox (Resemble AI) · EdAcc (University of Edinburgh) · Hugging Face · Claude Code (Anthropic) as coding assistant"

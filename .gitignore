@@ -1,5 +1,6 @@
 # Python / environment
 .venv/
+.venv-tts/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/

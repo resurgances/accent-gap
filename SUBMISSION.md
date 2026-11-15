@@ -41,10 +41,11 @@ English than for native US/UK English on public data, find which words it gets w
 - Whisper speech recognition models (openai/whisper-base, -small, -medium), OpenAI: https://github.com/openai/whisper , https://huggingface.co/openai/whisper-small
 - EdAcc, the Edinburgh International Accents of English Corpus (Sanabria et al., 2023): https://huggingface.co/datasets/edinburghcstr/edacc , paper: https://arxiv.org/abs/2303.18110
 - NLLB-200 translation model (facebook/nllb-200-distilled-600M), Meta AI, used in the demo for translation (CC BY-NC 4.0): https://huggingface.co/facebook/nllb-200-distilled-600M
+- Chatterbox Multilingual voice-cloning text-to-speech (chatterbox-tts 0.1.7, ResembleAI/chatterbox), Resemble AI, used in the demo to speak the translation in the speaker's voice (MIT license): https://github.com/resemble-ai/chatterbox
 - Hugging Face transformers, datasets, huggingface_hub: https://github.com/huggingface/transformers
 - PyTorch: https://pytorch.org
 - jiwer (WER alignment): https://github.com/jitsi/jiwer
-- librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, peft (LoRA), Gradio, Jupyter
+- librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, peft (LoRA), Gradio, uv, Jupyter
 - Claude Code (Anthropic) was used as an AI coding assistant: https://www.anthropic.com/claude-code
 
 ## Publishing the repo on GitHub (gh is not installed on this Mac)

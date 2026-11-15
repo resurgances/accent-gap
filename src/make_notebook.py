@@ -81,6 +81,18 @@ if os.path.exists(R + "lora_vs_plain.csv"):
 else:
     print("E4 not run")""")
 
+md("""## 4c. Demo check: spoken translation in the speaker's voice (`src/voice_check.py`)
+CER = character mismatch between the translation and what Whisper-medium heard in the generated audio.
+Voice similarity = cosine similarity of speaker embeddings (same encoder the voice model uses, so it may flatter it).""")
+code("""import os
+if os.path.exists(R + "voice_check_summary.csv"):
+    show("voice_check_summary.csv")
+    vc = pd.read_csv(R + "voice_check.csv", keep_default_na=False)
+    display(vc[["group", "clip_id", "language", "translation", "heard", "cer_first_try_pct", "cer_final_pct",
+                "generations", "sim_generated_vs_other_clip", "sim_real_same_speaker", "sim_real_different_speaker"]])
+else:
+    print("voice check not run")""")
+
 md("## 5. Error analysis (whisper-small)")
 md("Words missed most often (substituted or deleted), per group:")
 code('show("missed_words_by_group.csv");')
