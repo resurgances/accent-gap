@@ -1,16 +1,41 @@
-system,group,clips,clips_with_5plus_insertions,insertion_rate_pct
-small_plain,South Asian English,356,0,1.6
-small_plain,Native US/UK English,507,1,1.7
-small_plain,Nigerian English,274,5,2.0
-small_plain,Jamaican English,204,5,8.1
-small_plain,Spanish-accented English,287,6,3.0
-small_personal,South Asian English,356,2,5.1
-small_personal,Native US/UK English,507,6,5.2
-small_personal,Nigerian English,274,7,5.1
-small_personal,Jamaican English,204,11,21.9
-small_personal,Spanish-accented English,287,7,9.6
-small_control,South Asian English,356,0,1.8
-small_control,Native US/UK English,507,8,4.6
-small_control,Nigerian English,274,8,2.2
-small_control,Jamaican English,204,12,28.3
-small_control,Spanish-accented English,287,5,4.3
+system,group,clips,clips_with_5plus_insertions,empty_outputs,prompt_echo_outputs,insertion_rate_pct
+base_plain,South Asian English,356,3,0,0,4.1
+base_plain,Native US/UK English,507,8,0,0,4.5
+base_plain,Nigerian English,274,12,0,0,5.2
+base_plain,Jamaican English,204,13,0,0,16.9
+base_plain,Spanish-accented English,287,8,0,0,16.1
+base_personal_v1,South Asian English,356,4,13,0,7.6
+base_personal_v1,Native US/UK English,507,14,7,0,8.6
+base_personal_v1,Nigerian English,274,18,6,0,18.7
+base_personal_v1,Jamaican English,204,11,19,0,24.4
+base_personal_v1,Spanish-accented English,287,11,4,0,17.6
+small_plain,South Asian English,356,0,0,0,1.6
+small_plain,Native US/UK English,507,1,4,0,1.7
+small_plain,Nigerian English,274,5,0,0,2.0
+small_plain,Jamaican English,204,5,1,0,8.1
+small_plain,Spanish-accented English,287,6,0,0,3.0
+small_personal_v1,South Asian English,356,2,0,0,5.1
+small_personal_v1,Native US/UK English,507,6,8,0,5.2
+small_personal_v1,Nigerian English,274,7,0,0,5.1
+small_personal_v1,Jamaican English,204,11,2,0,21.9
+small_personal_v1,Spanish-accented English,287,7,3,0,9.6
+small_personal,South Asian English,356,1,0,1,1.9
+small_personal,Native US/UK English,507,2,0,0,1.8
+small_personal,Nigerian English,274,9,0,0,2.5
+small_personal,Jamaican English,204,5,0,0,5.2
+small_personal,Spanish-accented English,287,7,0,0,2.8
+small_control_v1,South Asian English,356,0,0,0,1.8
+small_control_v1,Native US/UK English,507,8,6,0,4.6
+small_control_v1,Nigerian English,274,8,3,0,2.2
+small_control_v1,Jamaican English,204,12,5,0,28.3
+small_control_v1,Spanish-accented English,287,5,4,0,4.3
+small_control,South Asian English,356,0,0,1,1.8
+small_control,Native US/UK English,507,2,1,0,1.8
+small_control,Nigerian English,274,5,0,0,2.3
+small_control,Jamaican English,204,9,0,0,8.4
+small_control,Spanish-accented English,287,6,0,0,3.0
+medium_plain,South Asian English,356,2,0,0,1.4
+medium_plain,Native US/UK English,507,2,0,0,1.6
+medium_plain,Nigerian English,274,3,0,0,1.7
+medium_plain,Jamaican English,204,7,0,0,3.9
+medium_plain,Spanish-accented English,287,4,0,0,4.6

@@ -24,53 +24,78 @@ small_plain,Spanish-accented English,number,50,32.0
 small_plain,Spanish-accented English,"rare word (names, places, ...)",82,59.8
 small_plain,Spanish-accented English,word in speaker's personal list,134,12.7
 small_plain,Spanish-accented English,word NOT in personal list,4435,22.7
-small_personal,South Asian English,common word,5394,16.5
-small_personal,South Asian English,number,100,29.0
-small_personal,South Asian English,"rare word (names, places, ...)",95,52.6
+small_personal,South Asian English,common word,5394,16.6
+small_personal,South Asian English,number,100,26.0
+small_personal,South Asian English,"rare word (names, places, ...)",95,49.5
 small_personal,South Asian English,word in speaker's personal list,169,11.2
-small_personal,South Asian English,word NOT in personal list,5420,17.5
-small_personal,Native US/UK English,common word,8947,20.3
-small_personal,Native US/UK English,number,96,33.3
+small_personal,South Asian English,word NOT in personal list,5420,17.6
+small_personal,Native US/UK English,common word,8947,19.7
+small_personal,Native US/UK English,number,96,26.0
 small_personal,Native US/UK English,"rare word (names, places, ...)",148,46.6
-small_personal,Native US/UK English,word in speaker's personal list,206,16.0
-small_personal,Native US/UK English,word NOT in personal list,8985,21.0
-small_personal,Nigerian English,common word,5352,25.4
-small_personal,Nigerian English,number,59,32.2
-small_personal,Nigerian English,"rare word (names, places, ...)",97,53.6
+small_personal,Native US/UK English,word in speaker's personal list,206,15.0
+small_personal,Native US/UK English,word NOT in personal list,8985,20.3
+small_personal,Nigerian English,common word,5352,24.2
+small_personal,Nigerian English,number,59,27.1
+small_personal,Nigerian English,"rare word (names, places, ...)",97,46.4
 small_personal,Nigerian English,word in speaker's personal list,172,18.0
-small_personal,Nigerian English,word NOT in personal list,5336,26.2
-small_personal,Jamaican English,common word,2912,31.6
-small_personal,Jamaican English,number,46,43.5
-small_personal,Jamaican English,"rare word (names, places, ...)",78,61.5
-small_personal,Jamaican English,word in speaker's personal list,73,27.4
-small_personal,Jamaican English,word NOT in personal list,2963,32.7
-small_personal,Spanish-accented English,common word,4437,22.1
-small_personal,Spanish-accented English,number,50,34.0
-small_personal,Spanish-accented English,"rare word (names, places, ...)",82,62.2
-small_personal,Spanish-accented English,word in speaker's personal list,134,11.2
-small_personal,Spanish-accented English,word NOT in personal list,4435,23.3
-small_control,South Asian English,common word,5394,17.3
-small_control,South Asian English,number,100,30.0
-small_control,South Asian English,"rare word (names, places, ...)",95,55.8
+small_personal,Nigerian English,word NOT in personal list,5336,24.9
+small_personal,Jamaican English,common word,2912,28.6
+small_personal,Jamaican English,number,46,37.0
+small_personal,Jamaican English,"rare word (names, places, ...)",78,53.8
+small_personal,Jamaican English,word in speaker's personal list,73,26.0
+small_personal,Jamaican English,word NOT in personal list,2963,29.5
+small_personal,Spanish-accented English,common word,4437,21.1
+small_personal,Spanish-accented English,number,50,30.0
+small_personal,Spanish-accented English,"rare word (names, places, ...)",82,58.5
+small_personal,Spanish-accented English,word in speaker's personal list,134,9.7
+small_personal,Spanish-accented English,word NOT in personal list,4435,22.2
+small_control,South Asian English,common word,5394,19.1
+small_control,South Asian English,number,100,27.0
+small_control,South Asian English,"rare word (names, places, ...)",95,49.5
 small_control,South Asian English,word in speaker's personal list,169,14.2
-small_control,South Asian English,word NOT in personal list,5420,18.3
-small_control,Native US/UK English,common word,8947,23.1
-small_control,Native US/UK English,number,96,31.2
+small_control,South Asian English,word NOT in personal list,5420,19.9
+small_control,Native US/UK English,common word,8947,20.3
+small_control,Native US/UK English,number,96,26.0
 small_control,Native US/UK English,"rare word (names, places, ...)",148,45.9
-small_control,Native US/UK English,word in speaker's personal list,206,19.4
-small_control,Native US/UK English,word NOT in personal list,8985,23.6
-small_control,Nigerian English,common word,5352,26.9
-small_control,Nigerian English,number,59,32.2
-small_control,Nigerian English,"rare word (names, places, ...)",97,55.7
-small_control,Nigerian English,word in speaker's personal list,172,19.2
-small_control,Nigerian English,word NOT in personal list,5336,27.7
-small_control,Jamaican English,common word,2912,33.1
-small_control,Jamaican English,number,46,52.2
-small_control,Jamaican English,"rare word (names, places, ...)",78,71.8
+small_control,Native US/UK English,word in speaker's personal list,206,14.6
+small_control,Native US/UK English,word NOT in personal list,8985,20.9
+small_control,Nigerian English,common word,5352,28.2
+small_control,Nigerian English,number,59,28.8
+small_control,Nigerian English,"rare word (names, places, ...)",97,51.5
+small_control,Nigerian English,word in speaker's personal list,172,22.1
+small_control,Nigerian English,word NOT in personal list,5336,28.8
+small_control,Jamaican English,common word,2912,29.3
+small_control,Jamaican English,number,46,41.3
+small_control,Jamaican English,"rare word (names, places, ...)",78,59.0
 small_control,Jamaican English,word in speaker's personal list,73,28.8
-small_control,Jamaican English,word NOT in personal list,2963,34.5
-small_control,Spanish-accented English,common word,4437,22.1
-small_control,Spanish-accented English,number,50,36.0
-small_control,Spanish-accented English,"rare word (names, places, ...)",82,59.8
-small_control,Spanish-accented English,word in speaker's personal list,134,13.4
-small_control,Spanish-accented English,word NOT in personal list,4435,23.2
+small_control,Jamaican English,word NOT in personal list,2963,30.2
+small_control,Spanish-accented English,common word,4437,20.8
+small_control,Spanish-accented English,number,50,30.0
+small_control,Spanish-accented English,"rare word (names, places, ...)",82,61.0
+small_control,Spanish-accented English,word in speaker's personal list,134,9.7
+small_control,Spanish-accented English,word NOT in personal list,4435,22.0
+small_personal_v1,South Asian English,common word,5394,16.5
+small_personal_v1,South Asian English,number,100,29.0
+small_personal_v1,South Asian English,"rare word (names, places, ...)",95,52.6
+small_personal_v1,South Asian English,word in speaker's personal list,169,11.2
+small_personal_v1,South Asian English,word NOT in personal list,5420,17.5
+small_personal_v1,Native US/UK English,common word,8947,20.3
+small_personal_v1,Native US/UK English,number,96,33.3
+small_personal_v1,Native US/UK English,"rare word (names, places, ...)",148,46.6
+small_personal_v1,Native US/UK English,word in speaker's personal list,206,16.0
+small_personal_v1,Native US/UK English,word NOT in personal list,8985,21.0
+small_personal_v1,Nigerian English,common word,5352,25.4
+small_personal_v1,Nigerian English,number,59,32.2
+small_personal_v1,Nigerian English,"rare word (names, places, ...)",97,53.6
+small_personal_v1,Nigerian English,word in speaker's personal list,172,18.0
+small_personal_v1,Nigerian English,word NOT in personal list,5336,26.2
+small_personal_v1,Jamaican English,common word,2912,31.6
+small_personal_v1,Jamaican English,number,46,43.5
+small_personal_v1,Jamaican English,"rare word (names, places, ...)",78,61.5
+small_personal_v1,Jamaican English,word in speaker's personal list,73,27.4
+small_personal_v1,Jamaican English,word NOT in personal list,2963,32.7
+small_personal_v1,Spanish-accented English,common word,4437,22.1
+small_personal_v1,Spanish-accented English,number,50,34.0
+small_personal_v1,Spanish-accented English,"rare word (names, places, ...)",82,62.2
+small_personal_v1,Spanish-accented English,word in speaker's personal list,134,11.2
+small_personal_v1,Spanish-accented English,word NOT in personal list,4435,23.3

@@ -1,0 +1,7 @@
+model,group,speakers,control_wer_pct,personal_wer_pct,personal_better_by_points,ci_low,ci_high
+small,South Asian English,8,21.6,19.3,2.3,-0.3,6.7
+small,Native US/UK English,15,22.5,21.9,0.6,-0.5,1.7
+small,Nigerian English,5,30.9,27.2,3.7,0.6,5.9
+small,Jamaican English,6,38.6,34.6,4.0,-0.1,12.6
+small,Spanish-accented English,6,24.6,24.6,-0.1,-1.2,0.5
+small,All groups (40 speakers),40,26.1,24.3,1.8,0.5,3.2

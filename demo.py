@@ -19,11 +19,31 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
-from common import CACHE, RESULTS, SAMPLE_RATE, load_clip, load_whisper, normalize, transcribe  # noqa: E402
+from common import (CACHE, RESULTS, SAMPLE_RATE, load_clip, load_whisper, looks_like_loop,  # noqa: E402
+                    normalize, transcribe)
+from run_transcribe import make_prompt  # noqa: E402
 
 MODEL_SIZE = "small"
 print(f"loading whisper-{MODEL_SIZE} ...")
 PROCESSOR, MODEL = load_whisper(MODEL_SIZE)
+
+# Same personal-mode design as in the README (chosen on DEV speakers):
+# the word list goes into a short sentence prompt, plus the loop guard.
+STYLE, NWORDS = "sentence", 40
+
+
+def personal_mode(x, words_str):
+    """Personal mode = Whisper + word-list prompt, with the loop guard:
+    if the output looks like a repetition loop, fall back to standard output."""
+    prompt = make_prompt(words_str, STYLE, NWORDS)
+    standard = transcribe(PROCESSOR, MODEL, [x])[0]
+    if not prompt:
+        return standard, standard, "(no word list given, so Personal mode = Standard)"
+    personal = transcribe(PROCESSOR, MODEL, [x], prompt=prompt)[0]
+    if looks_like_loop(personal):
+        return standard, standard, "(loop guard: personal output was a repetition loop, fell back to Standard)"
+    return standard, personal, ""
+
 
 NOTE = ("**Prototype.** Built for the Veritas AI Hackathon 2026 (AI + Languages). "
         "Standard = openai/whisper-small. Personal mode = the same model, given a short list of words "
@@ -102,13 +122,10 @@ def run_live(audio, word_list, reference):
     if audio is None:
         return "Please record or upload audio first.", "", ""
     x = to_16k_mono(audio)
-    standard = transcribe(PROCESSOR, MODEL, [x])[0]
-    prompt = ", ".join(w.strip() for w in word_list.replace("\n", ",").split(",") if w.strip())
-    personal = transcribe(PROCESSOR, MODEL, [x], prompt=prompt or None)[0]
-    if not prompt:
-        personal_note = "(no word list given, so Personal mode = Standard)"
-        personal = personal + " " + personal_note
-    return standard, personal, compare_html(standard, personal, reference or "")
+    words = ", ".join(w.strip() for w in (word_list or "").replace("\n", ",").split(",") if w.strip())
+    standard, personal, note = personal_mode(x, words)
+    return standard, (personal + " " + note).strip(), compare_html(standard, personal, reference or "") + \
+        (f"<p><i>{note}</i></p>" if note else "")
 
 
 # ------------------------------------------------------------------ tab 2
@@ -148,10 +165,8 @@ def run_example(label):
     if not label:
         return "Pick an example first."
     r = EXAMPLES.loc[label]
-    x = load_clip(r.clip_id)
-    standard = transcribe(PROCESSOR, MODEL, [x])[0]
-    personal = transcribe(PROCESSOR, MODEL, [x], prompt=WORD_LISTS.get(r.speaker) or None)[0]
-    return compare_html(standard, personal, r.reference)
+    standard, personal, note = personal_mode(load_clip(r.clip_id), WORD_LISTS.get(r.speaker, ""))
+    return compare_html(standard, personal, r.reference) + (f"<p><i>{note}</i></p>" if note else "")
 
 
 # ------------------------------------------------------------------ UI

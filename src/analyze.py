@@ -30,6 +30,11 @@ from run_transcribe import output_path
 GROUPS = ["South Asian English", "Native US/UK English", "Nigerian English",
           "Jamaican English", "Spanish-accented English"]
 SA, NATIVE = GROUPS[0], GROUPS[1]
+ALL = "All groups (40 speakers)"
+
+
+def in_group(df, g):
+    return df if g == ALL else df[df.group == g]
 MODELS = ["base", "small", "medium"]
 
 # Chart style (validated reference palette; see dataviz notes in LEARN.md)
@@ -115,7 +120,7 @@ def chart_wer_by_group(t):
     for lbl, (_, _, s) in zip(ax.get_yticklabels(), order):
         lbl.set_fontweight("normal" if s else "bold")
     ax.set_xlabel("Word error rate, % (lower is better). Line = 95% CI, resampling speakers")
-    ax.set_title("Whisper-small word error rate by accent group (EdAcc, held-out clips)", loc="left")
+    ax.set_title("Whisper-small error rate by accent group (EdAcc held-out clips)", loc="right", fontsize=10.5)
     ax.set_xlim(0, max(t.ci_high_pct) * 1.25)
     ax.grid(axis="x", color="#ecebe7", lw=0.8)
     ax.set_axisbelow(True)
@@ -276,7 +281,7 @@ def main():
     # ---- E3: personal mode
     lists = pd.read_csv(os.path.join(RESULTS, "personal_word_lists.csv"), keep_default_na=False)
     plists = {s: set(normalize(w) for w in ws.split(", ") if w) for s, ws in zip(lists.speaker, lists.words)}
-    e3_rows, spk_rows, cmp_rows = [], [], []
+    e3_rows, spk_rows, cmp_rows, own_rows = [], [], [], []
     for m in MODELS:
         a = systems.get(f"{m}_plain")
         if a is None:
@@ -285,8 +290,8 @@ def main():
             b = systems.get(f"{m}_{mode}")
             if b is None:
                 continue
-            for g in GROUPS:
-                da, db = a[a.group == g], b[b.group == g]
+            for g in GROUPS + [ALL]:
+                da, db = in_group(a, g), in_group(b, g)
                 lo, hi = bootstrap_paired_diff(da, db)
                 wa, wb = pooled_wer(da), pooled_wer(db)
                 ta = da.groupby("speaker").apply(lambda x: x.errors.sum() / x.N.sum(), include_groups=False)
@@ -311,6 +316,19 @@ def main():
             cmp_rows.append({"model": m, "prompt": mode, "gain_south_asian_points": pct(gsa),
                              "gain_native_points": pct(gna), "difference_points": pct(gsa - gna),
                              "difference_ci_low": pct(lo), "difference_ci_high": pct(hi)})
+        # Own list vs someone else's list (same prompt format): is it the
+        # PERSONAL words that help, or just having any prompt?
+        p, c = systems.get(f"{m}_personal"), systems.get(f"{m}_control")
+        if p is not None and c is not None:
+            for g in GROUPS + [ALL]:
+                dc, dp = in_group(c, g), in_group(p, g)
+                lo, hi = bootstrap_paired_diff(dc, dp)
+                own_rows.append({"model": m, "group": g, "speakers": dp.speaker.nunique(),
+                                 "control_wer_pct": pct(pooled_wer(dc)), "personal_wer_pct": pct(pooled_wer(dp)),
+                                 "personal_better_by_points": pct(pooled_wer(dc) - pooled_wer(dp)),
+                                 "ci_low": pct(lo), "ci_high": pct(hi)})
+    if own_rows:
+        save(pd.DataFrame(own_rows), "personal_vs_control.csv")
     if e3_rows:
         save(pd.DataFrame(e3_rows), "personal_mode_by_group.csv")
         save(pd.DataFrame(spk_rows), "personal_mode_by_speaker.csv")
@@ -361,6 +379,8 @@ def main():
             d = df[df.group == g]
             hall.append({"system": s, "group": g, "clips": len(d),
                          "clips_with_5plus_insertions": int((d.I >= 5).sum()),
+                         "empty_outputs": int((d.hyp.str.replace(r"[^A-Za-z]", "", regex=True) == "").sum()),
+                         "prompt_echo_outputs": int(d.hyp.str.lower().str.contains("words i often use").sum()),
                          "insertion_rate_pct": pct(d.I.sum() / d.N.sum())})
     save(pd.DataFrame(hall), "insertions_by_system.csv")
 
@@ -383,12 +403,13 @@ def main():
             worst[c] = (100 * worst[c]).round(1)
     worst["why_we_think_it_failed"] = ""
     worst["listen_check_needed"] = ""
-    out = os.path.join(RESULTS, "worst_examples.csv")
-    if os.path.exists(out):  # keep hand-written explanations if the file already has them
-        old = pd.read_csv(out, keep_default_na=False)
-        notes = old.set_index("clip_id")[["why_we_think_it_failed", "listen_check_needed"]]
-        for c in notes:
+    # Hand-written explanations (our best guess, to be checked by listening)
+    notes_path = os.path.join(os.path.dirname(RESULTS), "notes", "failure_notes.csv")
+    if os.path.exists(notes_path):
+        notes = pd.read_csv(notes_path, keep_default_na=False).set_index("clip_id")
+        for c in ["why_we_think_it_failed", "listen_check_needed"]:
             worst[c] = worst.clip_id.map(notes[c]).fillna("")
+        worst["picked_for_writeup"] = worst.clip_id.isin(notes.index)
     save(worst, "worst_examples.csv")
     save(side.assign(wer_plain=(100 * side.wer_plain).round(1),
                      wer_personal=(100 * side.wer_personal).round(1) if "wer_personal" in side else None),

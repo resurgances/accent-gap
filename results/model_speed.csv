@@ -1,2 +1,4 @@
 model,mean_seconds_per_clip
+whisper-base,0.199
 whisper-small,0.27
+whisper-medium,1.14

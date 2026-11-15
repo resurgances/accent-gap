@@ -1,4 +1,24 @@
 system,level,group,name,speakers,clips,ref_words,wer_pct,ci_low_pct,ci_high_pct,mean_speaker_wer_pct,sub_pct,del_pct,ins_pct
+base_plain,group,Jamaican English,Jamaican English,6,204,3036,52.9,34.7,81.3,52.9,21.3,14.7,16.9
+base_plain,group,Native US/UK English,Native US/UK English,15,507,9191,29.0,24.8,33.2,27.8,11.6,13.0,4.5
+base_plain,group,Nigerian English,Nigerian English,5,274,5508,39.0,34.2,50.7,42.4,17.2,16.6,5.2
+base_plain,group,South Asian English,South Asian English,8,356,5589,25.7,22.4,30.7,29.4,9.7,11.9,4.1
+base_plain,group,Spanish-accented English,Spanish-accented English,6,287,4569,41.5,34.6,45.3,38.9,11.4,14.0,16.1
+base_plain,subgroup,South Asian English,Indian English accent,4,265,4078,24.8,20.7,30.6,26.5,9.5,10.7,4.6
+base_plain,subgroup,South Asian English,Sinhalese L1,2,28,342,31.3,21.1,51.3,36.2,16.4,9.4,5.6
+base_plain,subgroup,Native US/UK English,UK English,9,341,6281,30.9,25.4,35.4,30.4,13.3,11.8,5.8
+base_plain,subgroup,Native US/UK English,US English,6,166,2910,25.1,18.8,31.5,23.8,7.8,15.4,1.8
+base_plain,subgroup,South Asian English,Urdu L1,2,63,1169,27.1,24.7,31.9,28.3,8.7,16.5,1.9
+base_personal_v1,group,Jamaican English,Jamaican English,6,204,3036,68.5,44.0,110.5,68.4,19.3,24.9,24.4
+base_personal_v1,group,Native US/UK English,Native US/UK English,15,507,9191,38.6,31.6,46.3,39.5,12.5,17.5,8.6
+base_personal_v1,group,Nigerian English,Nigerian English,5,274,5508,57.4,48.1,64.8,55.5,20.4,18.3,18.7
+base_personal_v1,group,South Asian English,South Asian English,8,356,5589,31.7,23.6,49.8,51.2,9.7,14.5,7.6
+base_personal_v1,group,Spanish-accented English,Spanish-accented English,6,287,4569,46.9,39.8,60.1,51.5,11.2,18.1,17.6
+base_personal_v1,subgroup,South Asian English,Indian English accent,4,265,4078,26.3,20.6,36.2,29.2,9.0,13.7,3.6
+base_personal_v1,subgroup,South Asian English,Sinhalese L1,2,28,342,76.0,25.1,176.5,100.8,18.1,8.5,49.4
+base_personal_v1,subgroup,Native US/UK English,UK English,9,341,6281,38.9,29.6,49.4,40.1,14.4,15.7,8.9
+base_personal_v1,subgroup,Native US/UK English,US English,6,166,2910,37.8,28.1,48.6,38.5,8.4,21.3,8.1
+base_personal_v1,subgroup,South Asian English,Urdu L1,2,63,1169,37.6,21.5,69.7,45.6,9.5,19.0,9.1
 small_plain,group,Jamaican English,Jamaican English,6,204,3036,37.6,24.4,58.9,39.0,16.8,12.7,8.1
 small_plain,group,Native US/UK English,Native US/UK English,15,507,9191,23.1,19.2,27.5,21.6,7.5,13.9,1.7
 small_plain,group,Nigerian English,Nigerian English,5,274,5508,28.1,25.9,30.2,28.2,9.9,16.1,2.0
@@ -9,23 +29,53 @@ small_plain,subgroup,South Asian English,Sinhalese L1,2,28,342,18.4,10.1,34.8,22
 small_plain,subgroup,Native US/UK English,UK English,9,341,6281,21.7,18.9,24.6,21.8,8.6,11.3,1.8
 small_plain,subgroup,Native US/UK English,US English,6,166,2910,26.1,14.7,34.8,21.2,5.1,19.5,1.5
 small_plain,subgroup,South Asian English,Urdu L1,2,63,1169,25.9,25.4,27.0,26.2,7.4,17.2,1.4
-small_personal,group,Jamaican English,Jamaican English,6,204,3036,54.4,31.2,86.4,55.8,17.2,15.3,21.9
-small_personal,group,Native US/UK English,Native US/UK English,15,507,9191,26.1,20.8,31.8,24.7,7.6,13.3,5.2
-small_personal,group,Nigerian English,Nigerian English,5,274,5508,31.1,26.8,34.9,32.1,10.6,15.4,5.1
-small_personal,group,South Asian English,South Asian English,8,356,5589,22.4,16.4,35.6,27.8,6.1,11.2,5.1
-small_personal,group,Spanish-accented English,Spanish-accented English,6,287,4569,32.6,27.8,36.2,31.0,7.7,15.3,9.6
-small_personal,subgroup,South Asian English,Indian English accent,4,265,4078,19.9,14.9,31.3,25.3,5.4,10.3,4.2
-small_personal,subgroup,South Asian English,Sinhalese L1,2,28,342,18.7,12.3,31.3,21.8,9.9,7.6,1.2
-small_personal,subgroup,Native US/UK English,UK English,9,341,6281,25.2,19.0,33.2,25.0,8.6,11.2,5.4
-small_personal,subgroup,Native US/UK English,US English,6,166,2910,28.0,18.6,34.2,24.1,5.4,17.8,4.8
-small_personal,subgroup,South Asian English,Urdu L1,2,63,1169,32.2,19.5,57.8,38.7,7.4,15.7,9.2
-small_control,group,Jamaican English,Jamaican English,6,204,3036,62.7,33.1,98.9,61.5,17.5,16.9,28.3
-small_control,group,Native US/UK English,Native US/UK English,15,507,9191,28.2,22.0,34.5,25.9,8.1,15.4,4.6
-small_control,group,Nigerian English,Nigerian English,5,274,5508,29.7,26.4,33.6,29.5,9.9,17.6,2.2
-small_control,group,South Asian English,South Asian English,8,356,5589,20.0,16.3,27.1,23.3,5.9,12.3,1.8
-small_control,group,Spanish-accented English,Spanish-accented English,6,287,4569,27.3,23.5,31.5,27.2,7.9,15.0,4.3
-small_control,subgroup,South Asian English,Indian English accent,4,265,4078,19.6,15.0,29.8,23.6,5.8,11.9,1.9
-small_control,subgroup,South Asian English,Sinhalese L1,2,28,342,20.2,12.8,34.8,23.8,8.5,10.8,0.9
-small_control,subgroup,Native US/UK English,UK English,9,341,6281,28.8,21.4,36.9,28.8,9.4,13.1,6.2
-small_control,subgroup,Native US/UK English,US English,6,166,2910,26.8,14.8,36.7,21.5,5.2,20.4,1.2
-small_control,subgroup,South Asian English,Urdu L1,2,63,1169,21.3,19.1,25.7,22.4,5.6,14.3,1.5
+small_personal_v1,group,Jamaican English,Jamaican English,6,204,3036,54.4,31.2,86.4,55.8,17.2,15.3,21.9
+small_personal_v1,group,Native US/UK English,Native US/UK English,15,507,9191,26.1,20.8,31.8,24.7,7.6,13.3,5.2
+small_personal_v1,group,Nigerian English,Nigerian English,5,274,5508,31.1,26.8,34.9,32.1,10.6,15.4,5.1
+small_personal_v1,group,South Asian English,South Asian English,8,356,5589,22.4,16.4,35.6,27.8,6.1,11.2,5.1
+small_personal_v1,group,Spanish-accented English,Spanish-accented English,6,287,4569,32.6,27.8,36.2,31.0,7.7,15.3,9.6
+small_personal_v1,subgroup,South Asian English,Indian English accent,4,265,4078,19.9,14.9,31.3,25.3,5.4,10.3,4.2
+small_personal_v1,subgroup,South Asian English,Sinhalese L1,2,28,342,18.7,12.3,31.3,21.8,9.9,7.6,1.2
+small_personal_v1,subgroup,Native US/UK English,UK English,9,341,6281,25.2,19.0,33.2,25.0,8.6,11.2,5.4
+small_personal_v1,subgroup,Native US/UK English,US English,6,166,2910,28.0,18.6,34.2,24.1,5.4,17.8,4.8
+small_personal_v1,subgroup,South Asian English,Urdu L1,2,63,1169,32.2,19.5,57.8,38.7,7.4,15.7,9.2
+small_personal,group,Jamaican English,Jamaican English,6,204,3036,34.6,24.1,49.0,36.2,17.1,12.4,5.2
+small_personal,group,Native US/UK English,Native US/UK English,15,507,9191,21.9,18.9,24.7,20.7,7.9,12.3,1.8
+small_personal,group,Nigerian English,Nigerian English,5,274,5508,27.2,24.5,30.7,28.2,9.6,15.1,2.5
+small_personal,group,South Asian English,South Asian English,8,356,5589,19.3,16.9,23.2,21.4,6.0,11.4,1.9
+small_personal,group,Spanish-accented English,Spanish-accented English,6,287,4569,24.6,22.6,27.8,25.8,8.4,13.4,2.8
+small_personal,subgroup,South Asian English,Indian English accent,4,265,4078,18.3,16.1,23.0,20.0,5.6,10.6,2.1
+small_personal,subgroup,South Asian English,Sinhalese L1,2,28,342,18.1,11.0,32.2,21.6,9.9,6.7,1.5
+small_personal,subgroup,Native US/UK English,UK English,9,341,6281,22.7,19.5,26.2,22.9,8.9,11.9,1.8
+small_personal,subgroup,Native US/UK English,US English,6,166,2910,20.3,13.4,25.2,17.2,5.5,13.2,1.6
+small_personal,subgroup,South Asian English,Urdu L1,2,63,1169,23.0,21.4,26.2,23.8,6.1,15.5,1.5
+small_control_v1,group,Jamaican English,Jamaican English,6,204,3036,62.7,33.1,98.9,61.5,17.5,16.9,28.3
+small_control_v1,group,Native US/UK English,Native US/UK English,15,507,9191,28.2,22.0,34.5,25.9,8.1,15.4,4.6
+small_control_v1,group,Nigerian English,Nigerian English,5,274,5508,29.7,26.4,33.6,29.5,9.9,17.6,2.2
+small_control_v1,group,South Asian English,South Asian English,8,356,5589,20.0,16.3,27.1,23.3,5.9,12.3,1.8
+small_control_v1,group,Spanish-accented English,Spanish-accented English,6,287,4569,27.3,23.5,31.5,27.2,7.9,15.0,4.3
+small_control_v1,subgroup,South Asian English,Indian English accent,4,265,4078,19.6,15.0,29.8,23.6,5.8,11.9,1.9
+small_control_v1,subgroup,South Asian English,Sinhalese L1,2,28,342,20.2,12.8,34.8,23.8,8.5,10.8,0.9
+small_control_v1,subgroup,Native US/UK English,UK English,9,341,6281,28.8,21.4,36.9,28.8,9.4,13.1,6.2
+small_control_v1,subgroup,Native US/UK English,US English,6,166,2910,26.8,14.8,36.7,21.5,5.2,20.4,1.2
+small_control_v1,subgroup,South Asian English,Urdu L1,2,63,1169,21.3,19.1,25.7,22.4,5.6,14.3,1.5
+small_control,group,Jamaican English,Jamaican English,6,204,3036,38.6,23.9,61.6,40.3,17.7,12.5,8.4
+small_control,group,Native US/UK English,Native US/UK English,15,507,9191,22.5,19.3,25.6,21.2,7.8,13.0,1.8
+small_control,group,Nigerian English,Nigerian English,5,274,5508,30.9,25.9,35.9,30.5,10.0,18.6,2.3
+small_control,group,South Asian English,South Asian English,8,356,5589,21.6,18.0,27.6,23.4,6.5,13.3,1.8
+small_control,group,Spanish-accented English,Spanish-accented English,6,287,4569,24.6,22.7,26.8,25.2,8.3,13.4,3.0
+small_control,subgroup,South Asian English,Indian English accent,4,265,4078,21.5,17.2,31.1,24.2,6.3,13.1,2.1
+small_control,subgroup,South Asian English,Sinhalese L1,2,28,342,17.5,9.7,33.0,21.4,10.2,5.8,1.5
+small_control,subgroup,Native US/UK English,UK English,9,341,6281,22.2,19.2,25.5,22.4,8.8,11.5,1.9
+small_control,subgroup,Native US/UK English,US English,6,166,2910,23.0,14.3,29.1,19.4,5.5,16.1,1.5
+small_control,subgroup,South Asian English,Urdu L1,2,63,1169,23.3,22.2,25.4,23.8,6.0,16.1,1.2
+medium_plain,group,Jamaican English,Jamaican English,6,204,3036,29.9,20.7,42.3,30.9,13.5,12.5,3.9
+medium_plain,group,Native US/UK English,Native US/UK English,15,507,9191,18.7,16.1,21.6,17.9,5.8,11.3,1.6
+medium_plain,group,Nigerian English,Nigerian English,5,274,5508,26.5,23.3,30.5,26.9,8.4,16.5,1.7
+medium_plain,group,South Asian English,South Asian English,8,356,5589,18.0,15.2,22.9,20.1,4.9,11.7,1.4
+medium_plain,group,Spanish-accented English,Spanish-accented English,6,287,4569,25.5,21.3,34.6,29.2,7.4,13.5,4.6
+medium_plain,subgroup,South Asian English,Indian English accent,4,265,4078,16.7,14.2,22.6,18.8,4.5,10.7,1.5
+medium_plain,subgroup,South Asian English,Sinhalese L1,2,28,342,16.1,10.1,27.8,19.0,8.5,5.0,2.6
+medium_plain,subgroup,Native US/UK English,UK English,9,341,6281,19.4,16.2,22.3,19.4,6.8,11.0,1.6
+medium_plain,subgroup,Native US/UK English,US English,6,166,2910,17.3,12.1,23.6,15.7,3.7,12.1,1.5
+medium_plain,subgroup,South Asian English,Urdu L1,2,63,1169,23.1,21.4,26.5,23.9,5.3,16.9,0.9
