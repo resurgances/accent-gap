@@ -13,7 +13,7 @@ import jiwer
 import numpy as np
 import pandas as pd
 
-from common import CACHE, RESULTS, normalize
+from common import CACHE, RESULTS, looks_like_loop, normalize
 
 N_BOOT = 2000  # number of bootstrap resamples
 
@@ -39,25 +39,43 @@ def score_clip(ref_norm, hyp_norm):
     return counts, tags
 
 
-def load_eval_clips():
+def load_eval_clips(role="eval"):
     clips = pd.read_csv(os.path.join(CACHE, "clips.csv"))
-    clips = clips[clips.role == "eval"].copy()
+    clips = clips[clips.role == role].copy()
     clips["ref_norm"] = clips.ref.apply(normalize)
     # Clips whose reference is ONLY filler words (e.g. "UM", "MM HMM") become
     # empty after normalization and cannot be scored -> excluded from ALL systems.
     return clips[clips.ref_norm.str.strip() != ""]
 
 
-def score_system(clips, model, mode):
-    """Score one system (e.g. small/plain). Returns per-clip table, or None if
-    that system has not been run yet / is incomplete."""
-    path = os.path.join(RESULTS, f"transcripts_{model}_{mode}.csv")
+def read_hyps(path):
+    """Load a transcripts CSV, or None if that system has not been run yet."""
     if not os.path.exists(path):
         return None
-    hyp = pd.read_csv(path, keep_default_na=False).drop_duplicates("clip_id")
-    df = clips.merge(hyp[["clip_id", "hyp"]], on="clip_id", how="inner")
+    return pd.read_csv(path, keep_default_na=False).drop_duplicates("clip_id")[["clip_id", "hyp"]]
+
+
+def with_loop_guard(prompted, plain):
+    """Loop guard: wherever the prompted output looks like a repetition loop,
+    use the plain (no-prompt) output instead. On a phone this means: if the
+    personal-mode text looks broken, re-run without the word list."""
+    m = prompted.merge(plain, on="clip_id", suffixes=("", "_plain"))
+    loop = m.hyp.apply(looks_like_loop)
+    m.loc[loop, "hyp"] = m.loc[loop, "hyp_plain"]
+    return m[["clip_id", "hyp"]], int(loop.sum())
+
+
+def score_system(clips, model=None, mode=None, hyps=None, name=None):
+    """Score one system (e.g. small/plain), either from its transcripts file or
+    from a given `hyps` table. Returns per-clip table, or None if missing/incomplete."""
+    name = name or f"{model}_{mode}"
+    if hyps is None:
+        hyps = read_hyps(os.path.join(RESULTS, f"transcripts_{model}_{mode}.csv"))
+    if hyps is None:
+        return None
+    df = clips.merge(hyps[["clip_id", "hyp"]], on="clip_id", how="inner")
     if len(df) < len(clips):
-        print(f"  {model}/{mode}: only {len(df)}/{len(clips)} clips done - skipping")
+        print(f"  {name}: only {len(df)}/{len(clips)} clips done - skipping")
         return None
     df["hyp_norm"] = df.hyp.apply(normalize)
     res = [score_clip(r, h) for r, h in zip(df.ref_norm, df.hyp_norm)]
@@ -66,7 +84,7 @@ def score_system(clips, model, mode):
     df["errors"] = df.S + df.D + df.I
     df["wer"] = df.errors / df.N
     df["word_tags"] = [t for _, t in res]
-    df["system"] = f"{model}_{mode}"
+    df["system"] = name
     return df
 
 
@@ -128,7 +146,6 @@ def bootstrap_diff_of_gains(a1, b1, a2, b2, seed=0):
     """CI for [gain in group 1] - [gain in group 2], gain = WER(a) - WER(b).
     Used to ask: does personal mode help South Asian speakers MORE than natives?"""
     rng = np.random.default_rng(seed)
-    out = []
     t1, t2 = paired_speaker_table(a1, b1), paired_speaker_table(a2, b2)
     i1 = rng.integers(0, len(t1), size=(N_BOOT, len(t1)))
     i2 = rng.integers(0, len(t2), size=(N_BOOT, len(t2)))

@@ -1,0 +1,16 @@
+system,group,clips,clips_with_5plus_insertions,insertion_rate_pct
+small_plain,South Asian English,356,0,1.6
+small_plain,Native US/UK English,507,1,1.7
+small_plain,Nigerian English,274,5,2.0
+small_plain,Jamaican English,204,5,8.1
+small_plain,Spanish-accented English,287,6,3.0
+small_personal,South Asian English,356,2,5.1
+small_personal,Native US/UK English,507,6,5.2
+small_personal,Nigerian English,274,7,5.1
+small_personal,Jamaican English,204,11,21.9
+small_personal,Spanish-accented English,287,7,9.6
+small_control,South Asian English,356,0,1.8
+small_control,Native US/UK English,507,8,4.6
+small_control,Nigerian English,274,8,2.2
+small_control,Jamaican English,204,12,28.3
+small_control,Spanish-accented English,287,5,4.3

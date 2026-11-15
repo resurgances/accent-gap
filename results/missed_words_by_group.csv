@@ -1,0 +1,76 @@
+group,word,occurrences,missed,miss_rate_pct,most_common_wrong_output
+South Asian English,i,350,75,21.4,with
+South Asian English,you,209,49,23.4,i
+South Asian English,the,169,40,23.7,that
+South Asian English,like,147,37,25.2,a
+South Asian English,and,160,36,22.5,i
+South Asian English,know,95,34,35.8,a
+South Asian English,it,132,28,21.2,that
+South Asian English,that,116,25,21.6,not
+South Asian English,is,143,24,16.8,this
+South Asian English,so,108,21,19.4,
+South Asian English,a,102,17,16.7,at
+South Asian English,are,53,15,28.3,other
+South Asian English,yeah,55,15,27.3,i
+South Asian English,no,38,14,36.8,i
+South Asian English,0,33,13,39.4,am
+Native US/UK English,i,617,139,22.5,and
+Native US/UK English,like,346,78,22.5,a
+Native US/UK English,it,306,77,25.2,of
+Native US/UK English,is,277,58,20.9,you
+Native US/UK English,the,236,51,21.6,a
+Native US/UK English,you,258,51,19.8,he
+Native US/UK English,and,176,44,25.0,i
+Native US/UK English,yeah,165,43,26.1,have
+Native US/UK English,not,195,43,22.1,that
+Native US/UK English,that,191,39,20.4,the
+Native US/UK English,a,177,34,19.2,the
+Native US/UK English,are,67,30,44.8,were
+Native US/UK English,just,91,29,31.9,will
+Native US/UK English,of,122,27,22.1,is
+Native US/UK English,to,182,27,14.8,the
+Nigerian English,you,287,75,26.1,i
+Nigerian English,i,351,75,21.4,a
+Nigerian English,it,142,57,40.1,this
+Nigerian English,yeah,139,51,36.7,i
+Nigerian English,is,133,37,27.8,to
+Nigerian English,so,126,33,26.2,to
+Nigerian English,know,117,32,27.4,knew
+Nigerian English,to,176,31,17.6,member
+Nigerian English,a,106,30,28.3,the
+Nigerian English,that,89,28,31.5,the
+Nigerian English,like,110,26,23.6,me
+Nigerian English,the,121,26,21.5,a
+Nigerian English,was,73,21,28.8,is
+Nigerian English,have,75,21,28.0,was
+Nigerian English,are,37,16,43.2,adults
+Jamaican English,i,173,43,24.9,you
+Jamaican English,it,118,35,29.7,you
+Jamaican English,you,81,30,37.0,i
+Jamaican English,is,122,30,24.6,chose
+Jamaican English,like,92,26,28.3,i
+Jamaican English,and,63,19,30.2,i
+Jamaican English,a,57,18,31.6,leveraging
+Jamaican English,not,61,17,27.9,really
+Jamaican English,that,80,17,21.2,on
+Jamaican English,do,47,16,34.0,move
+Jamaican English,to,69,16,23.2,the
+Jamaican English,the,80,16,20.0,some
+Jamaican English,yeah,58,15,25.9,that
+Jamaican English,cause,11,11,100.0,because
+Jamaican English,what,27,11,40.7,why
+Spanish-accented English,i,256,58,22.7,not
+Spanish-accented English,the,175,50,28.6,it
+Spanish-accented English,is,184,45,24.5,not
+Spanish-accented English,you,147,39,26.5,it
+Spanish-accented English,it,129,34,26.4,he
+Spanish-accented English,and,129,28,21.7,the
+Spanish-accented English,yeah,72,23,31.9,am
+Spanish-accented English,a,103,23,22.3,it
+Spanish-accented English,to,115,22,19.1,are
+Spanish-accented English,in,60,20,33.3,sound
+Spanish-accented English,but,55,19,34.5,road
+Spanish-accented English,that,102,19,18.6,it
+Spanish-accented English,no,42,18,42.9,know
+Spanish-accented English,are,64,18,28.1,is
+Spanish-accented English,like,85,17,20.0,one

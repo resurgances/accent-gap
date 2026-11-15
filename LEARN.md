@@ -113,3 +113,41 @@ interval is wide, and that is the honest answer.
 side. Our personal mode is *intentionally not* speaker-disjoint, because the
 whole idea is to adapt to one person. Instead it is *time*-disjoint: earlier
 conversation vs later conversation.
+
+---
+
+## Phase 2: a bug we caught (and why it matters)
+
+Some EdAcc conversations were recorded in parts (clip ids like `EDACC-C31_P1-12`
+and `EDACC-C31_P2-3`), and **clip numbers restart in every part**. Our first
+"conversation order" sorted by clip number alone, which mixed parts together,
+so some "history" clips actually came *after* "eval" clips. We found this while
+reading clip ids during error analysis, fixed the sort to (part, clip number),
+and re-ran everything. The results in the README are all from the fixed version.
+Lesson: always look at your raw data; a split that is *almost* right can still leak.
+
+## Phase 3: personal mode v1 failed, and we fixed it without cheating
+
+**What happened.** Our first personal mode (v1) was a 40-word comma-separated
+list passed as the Whisper prompt, and it made WER *worse* in every group. When we
+looked at the worst clips, the cause was clear: on short replies like
+"no no no", Whisper copied the list format and got stuck in a **repetition loop**
+("no, no, no, no, ..." about 100 times until it hit the length limit). Each loop
+adds about 100 "inserted" words, so a handful of clips wiped out the small gains
+on hundreds of other clips.
+
+**Why we could not just try fixes on the test clips.** If you try 8 versions and
+keep the one that scores best on the test set, the test score is no longer
+honest. You have partly fitted the test, which is a form of leakage. So we made
+a **dev set** (development set): 32 other EdAcc speakers (Irish, Scottish,
+Kenyan, South African, Italian, Vietnamese) who are in none of our result groups.
+We tried the variants there, picked the winner with a rule fixed in advance
+(lowest dev WER), and ran it **once** on the evaluation clips. We still report
+v1's evaluation result, because it is a real negative result.
+
+**The loop guard.** The original Whisper code detects loops by compressing the
+output text with zlib. Normal sentences barely shrink, but "no, no, no, ..."
+shrinks a lot. If the compression ratio is above 2.4, Whisper's own threshold,
+the output is treated as a failed decode. Our guard says: if personal-mode output
+looks like a loop, use the standard output instead. On a phone that means "re-run
+without the word list".

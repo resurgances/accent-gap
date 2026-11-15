@@ -41,6 +41,10 @@ SOUTH_ASIAN_L1 = {"Hindi", "Urdu", "Gujarati", "Sindhi", "Punjabi", "Marathi", "
                   "Tamil", "Telugu", "Kannada", "Malayalam", "Nepali", "Sinhalese",
                   "Indian English"}
 
+DEV_ACCENTS = {"Irish English", "Scottish English", "Kenyan English", "South African English",
+               "Italian", "Vietnamese"}
+MAX_DEV_PER_SPEAKER = 40
+
 DUR_LOG = os.path.join(CACHE, "durations.csv")
 
 
@@ -60,6 +64,11 @@ def assign_group(accent, l1, raw_accent):
         return "Jamaican English", "Jamaican English"
     if accent == "Spanish":
         return "Spanish-accented English", "Spanish-accented English"
+    if accent in DEV_ACCENTS:
+        # DEV speakers are in none of our result groups. We only use them to
+        # choose design details (e.g. prompt format), so those choices are
+        # never tuned on the clips we report results on.
+        return "DEV", accent
     return None, None
 
 
@@ -136,17 +145,19 @@ def main():
     clips.loc[clips.role == "eval_candidate", "role"] = "eval_dropped"
     for spk, d in clips[ok].groupby("speaker"):
         idx = d.index
-        if len(idx) > MAX_EVAL_PER_SPEAKER:
-            idx = idx[np.linspace(0, len(idx) - 1, MAX_EVAL_PER_SPEAKER).round().astype(int)]
-        clips.loc[idx, "role"] = "eval"
+        is_dev = d.group.iloc[0] == "DEV"
+        cap = MAX_DEV_PER_SPEAKER if is_dev else MAX_EVAL_PER_SPEAKER
+        if len(idx) > cap:
+            idx = idx[np.linspace(0, len(idx) - 1, cap).round().astype(int)]
+        clips.loc[idx, "role"] = "dev" if is_dev else "eval"
 
     cols = ["clip_id", "speaker", "group", "subgroup", "accent", "l1", "gender", "split",
             "part", "clip_num", "role", "duration", "ref"]
     clips[cols].to_csv(os.path.join(CACHE, "clips.csv"), index=False)
 
-    ev = clips[clips.role == "eval"]
+    ev = clips[clips.role.isin(["eval", "dev"])]
     summ = ev.groupby(["group", "subgroup"]).agg(
-        speakers=("speaker", "nunique"), eval_clips=("clip_id", "count"),
+        speakers=("speaker", "nunique"), eval_or_dev_clips=("clip_id", "count"),
         eval_minutes=("duration", lambda x: round(x.sum() / 60, 1))).reset_index()
     hist = clips[clips.role == "history"].groupby(["group", "subgroup"]).size().rename("history_clips")
     summ = summ.merge(hist, on=["group", "subgroup"])

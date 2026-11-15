@@ -1,0 +1,121 @@
+system,speaker,group,subgroup,l1,gender,clips,ref_words,wer_pct
+small_plain,EDACC-C03-B,Native US/UK English,UK English,Southern British English,female,19,404,18.3
+small_plain,EDACC-C05-B,South Asian English,Indian English accent,Indian English,female,76,1440,16.4
+small_plain,EDACC-C06-A,Native US/UK English,UK English,Southern British English,male,25,534,20.0
+small_plain,EDACC-C06-B,Native US/UK English,US English,Mainstream US English,male,20,410,36.6
+small_plain,EDACC-C07-A,Native US/UK English,US English,Mainstream US English,male,36,912,39.1
+small_plain,EDACC-C09-A,South Asian English,Indian English accent,Indian English,female,38,412,27.7
+small_plain,EDACC-C09-B,South Asian English,Indian English accent,Indian English,female,51,841,26.2
+small_plain,EDACC-C10-A,South Asian English,Sinhalese L1,Sinhalese,female,12,115,34.8
+small_plain,EDACC-C10-B,South Asian English,Sinhalese L1,Sinhalese,male,16,227,10.1
+small_plain,EDACC-C11-B,Native US/UK English,UK English,Southern British English,female,22,915,16.8
+small_plain,EDACC-C14-A,Native US/UK English,US English,Mainstream US English,female,35,434,13.4
+small_plain,EDACC-C17-B,Native US/UK English,UK English,Southern British English,demiboy,28,607,21.3
+small_plain,EDACC-C19-B,Native US/UK English,US English,Mainstream US English,female,6,121,3.3
+small_plain,EDACC-C21-A,Spanish-accented English,Spanish-accented English,Catalan,male,28,434,30.9
+small_plain,EDACC-C21-B,Spanish-accented English,Spanish-accented English,Spanish,female,27,423,21.0
+small_plain,EDACC-C23-A,Spanish-accented English,Spanish-accented English,Catalan,female,74,1111,24.7
+small_plain,EDACC-C27-B,Spanish-accented English,Spanish-accented English,Spanish (Mexican),male,19,299,34.8
+small_plain,EDACC-C29-A,Nigerian English,Nigerian English,Nigerian English,female,100,1748,29.2
+small_plain,EDACC-C29-B,Nigerian English,Nigerian English,Nigerian English,male,100,2184,27.3
+small_plain,EDACC-C31-A,South Asian English,Urdu L1,Urdu,male,37,780,25.4
+small_plain,EDACC-C31-B,South Asian English,Urdu L1,Urdu,male,26,389,27.0
+small_plain,EDACC-C32-A,Native US/UK English,UK English,Southern British English,female,77,1075,24.0
+small_plain,EDACC-C32-B,Native US/UK English,UK English,Southern British English,male,71,708,27.8
+small_plain,EDACC-C33-A,Native US/UK English,UK English,Southern British English,male,46,1101,21.3
+small_plain,EDACC-C36-A,South Asian English,Indian English accent,Hindi,female,100,1385,15.6
+small_plain,EDACC-C37-A,Spanish-accented English,Spanish-accented English,Spanish,male,58,932,21.4
+small_plain,EDACC-C37-B,Spanish-accented English,Spanish-accented English,Spanish,male,81,1370,26.2
+small_plain,EDACC-C41-A,Nigerian English,Nigerian English,Nigerian English,female,35,587,22.1
+small_plain,EDACC-C41-B,Native US/UK English,UK English,Southern British English,male,29,427,31.4
+small_plain,EDACC-C42-B,Native US/UK English,UK English,Southern British English,male,24,510,15.3
+small_plain,EDACC-C45-A,Nigerian English,Nigerian English,Nigerian English,male,19,666,31.1
+small_plain,EDACC-C45-B,Nigerian English,Nigerian English,Nigerian English,male,20,323,31.3
+small_plain,EDACC-C48-A,Jamaican English,Jamaican English,Jamaican English,female,9,230,35.7
+small_plain,EDACC-C48-B,Jamaican English,Jamaican English,Jamaican English,female,13,413,15.3
+small_plain,EDACC-C49-A,Jamaican English,Jamaican English,Jamaican English,female,42,781,25.2
+small_plain,EDACC-C49-B,Jamaican English,Jamaican English,Jamaican English,female,41,420,49.5
+small_plain,EDACC-C52-A,Jamaican English,Jamaican English,Jamaican English,male,48,706,29.7
+small_plain,EDACC-C52-B,Jamaican English,Jamaican English,Jamaican English,male,51,486,78.8
+small_plain,EDACC-C63-B,Native US/UK English,US English,Mainstream US English,female,25,390,13.6
+small_plain,EDACC-C64-A,Native US/UK English,US English,Mainstream US English,male,44,643,21.3
+small_personal,EDACC-C03-B,Native US/UK English,UK English,Southern British English,female,19,404,17.8
+small_personal,EDACC-C05-B,South Asian English,Indian English accent,Indian English,female,76,1440,15.5
+small_personal,EDACC-C06-A,Native US/UK English,UK English,Southern British English,male,25,534,18.2
+small_personal,EDACC-C06-B,Native US/UK English,US English,Mainstream US English,male,20,410,36.3
+small_personal,EDACC-C07-A,Native US/UK English,US English,Mainstream US English,male,36,912,33.0
+small_personal,EDACC-C09-A,South Asian English,Indian English accent,Indian English,female,38,412,49.8
+small_personal,EDACC-C09-B,South Asian English,Indian English accent,Indian English,female,51,841,21.8
+small_personal,EDACC-C10-A,South Asian English,Sinhalese L1,Sinhalese,female,12,115,31.3
+small_personal,EDACC-C10-B,South Asian English,Sinhalese L1,Sinhalese,male,16,227,12.3
+small_personal,EDACC-C11-B,Native US/UK English,UK English,Southern British English,female,22,915,16.3
+small_personal,EDACC-C14-A,Native US/UK English,US English,Mainstream US English,female,35,434,15.7
+small_personal,EDACC-C17-B,Native US/UK English,UK English,Southern British English,demiboy,28,607,22.4
+small_personal,EDACC-C19-B,Native US/UK English,US English,Mainstream US English,female,6,121,9.9
+small_personal,EDACC-C21-A,Spanish-accented English,Spanish-accented English,Catalan,male,28,434,35.3
+small_personal,EDACC-C21-B,Spanish-accented English,Spanish-accented English,Spanish,female,27,423,20.1
+small_personal,EDACC-C23-A,Spanish-accented English,Spanish-accented English,Catalan,female,74,1111,38.8
+small_personal,EDACC-C27-B,Spanish-accented English,Spanish-accented English,Spanish (Mexican),male,19,299,28.4
+small_personal,EDACC-C29-A,Nigerian English,Nigerian English,Nigerian English,female,100,1748,30.2
+small_personal,EDACC-C29-B,Nigerian English,Nigerian English,Nigerian English,male,100,2184,32.9
+small_personal,EDACC-C31-A,South Asian English,Urdu L1,Urdu,male,37,780,19.5
+small_personal,EDACC-C31-B,South Asian English,Urdu L1,Urdu,male,26,389,57.8
+small_personal,EDACC-C32-A,Native US/UK English,UK English,Southern British English,female,77,1075,20.7
+small_personal,EDACC-C32-B,Native US/UK English,UK English,Southern British English,male,71,708,51.0
+small_personal,EDACC-C33-A,Native US/UK English,UK English,Southern British English,male,46,1101,29.2
+small_personal,EDACC-C36-A,South Asian English,Indian English accent,Hindi,female,100,1385,14.4
+small_personal,EDACC-C37-A,Spanish-accented English,Spanish-accented English,Spanish,male,58,932,31.7
+small_personal,EDACC-C37-B,Spanish-accented English,Spanish-accented English,Spanish,male,81,1370,32.0
+small_personal,EDACC-C41-A,Nigerian English,Nigerian English,Nigerian English,female,35,587,23.0
+small_personal,EDACC-C41-B,Native US/UK English,UK English,Southern British English,male,29,427,34.0
+small_personal,EDACC-C42-B,Native US/UK English,UK English,Southern British English,male,24,510,15.9
+small_personal,EDACC-C45-A,Nigerian English,Nigerian English,Nigerian English,male,19,666,26.6
+small_personal,EDACC-C45-B,Nigerian English,Nigerian English,Nigerian English,male,20,323,47.7
+small_personal,EDACC-C48-A,Jamaican English,Jamaican English,Jamaican English,female,9,230,30.9
+small_personal,EDACC-C48-B,Jamaican English,Jamaican English,Jamaican English,female,13,413,14.8
+small_personal,EDACC-C49-A,Jamaican English,Jamaican English,Jamaican English,female,42,781,37.3
+small_personal,EDACC-C49-B,Jamaican English,Jamaican English,Jamaican English,female,41,420,115.2
+small_personal,EDACC-C52-A,Jamaican English,Jamaican English,Jamaican English,male,48,706,37.7
+small_personal,EDACC-C52-B,Jamaican English,Jamaican English,Jamaican English,male,51,486,98.8
+small_personal,EDACC-C63-B,Native US/UK English,US English,Mainstream US English,female,25,390,13.6
+small_personal,EDACC-C64-A,Native US/UK English,US English,Mainstream US English,male,44,643,36.1
+small_control,EDACC-C03-B,Native US/UK English,UK English,Southern British English,female,19,404,17.1
+small_control,EDACC-C05-B,South Asian English,Indian English accent,Indian English,female,76,1440,15.4
+small_control,EDACC-C06-A,Native US/UK English,UK English,Southern British English,male,25,534,19.1
+small_control,EDACC-C06-B,Native US/UK English,US English,Mainstream US English,male,20,410,35.6
+small_control,EDACC-C07-A,Native US/UK English,US English,Mainstream US English,male,36,912,41.9
+small_control,EDACC-C09-A,South Asian English,Indian English accent,Indian English,female,38,412,39.1
+small_control,EDACC-C09-B,South Asian English,Indian English accent,Indian English,female,51,841,25.3
+small_control,EDACC-C10-A,South Asian English,Sinhalese L1,Sinhalese,female,12,115,34.8
+small_control,EDACC-C10-B,South Asian English,Sinhalese L1,Sinhalese,male,16,227,12.8
+small_control,EDACC-C11-B,Native US/UK English,UK English,Southern British English,female,22,915,16.5
+small_control,EDACC-C14-A,Native US/UK English,US English,Mainstream US English,female,35,434,13.1
+small_control,EDACC-C17-B,Native US/UK English,UK English,Southern British English,demiboy,28,607,47.3
+small_control,EDACC-C19-B,Native US/UK English,US English,Mainstream US English,female,6,121,3.3
+small_control,EDACC-C21-A,Spanish-accented English,Spanish-accented English,Catalan,male,28,434,31.6
+small_control,EDACC-C21-B,Spanish-accented English,Spanish-accented English,Spanish,female,27,423,19.1
+small_control,EDACC-C23-A,Spanish-accented English,Spanish-accented English,Catalan,female,74,1111,28.2
+small_control,EDACC-C27-B,Spanish-accented English,Spanish-accented English,Spanish (Mexican),male,19,299,26.8
+small_control,EDACC-C29-A,Nigerian English,Nigerian English,Nigerian English,female,100,1748,34.3
+small_control,EDACC-C29-B,Nigerian English,Nigerian English,Nigerian English,male,100,2184,26.9
+small_control,EDACC-C31-A,South Asian English,Urdu L1,Urdu,male,37,780,19.1
+small_control,EDACC-C31-B,South Asian English,Urdu L1,Urdu,male,26,389,25.7
+small_control,EDACC-C32-A,Native US/UK English,UK English,Southern British English,female,77,1075,24.9
+small_control,EDACC-C32-B,Native US/UK English,UK English,Southern British English,male,71,708,49.0
+small_control,EDACC-C33-A,Native US/UK English,UK English,Southern British English,male,46,1101,30.1
+small_control,EDACC-C36-A,South Asian English,Indian English accent,Hindi,female,100,1385,14.6
+small_control,EDACC-C37-A,Spanish-accented English,Spanish-accented English,Spanish,male,58,932,34.1
+small_control,EDACC-C37-B,Spanish-accented English,Spanish-accented English,Spanish,male,81,1370,23.1
+small_control,EDACC-C41-A,Nigerian English,Nigerian English,Nigerian English,female,35,587,23.7
+small_control,EDACC-C41-B,Native US/UK English,UK English,Southern British English,male,29,427,36.8
+small_control,EDACC-C42-B,Native US/UK English,UK English,Southern British English,male,24,510,18.6
+small_control,EDACC-C45-A,Nigerian English,Nigerian English,Nigerian English,male,19,666,30.9
+small_control,EDACC-C45-B,Nigerian English,Nigerian English,Nigerian English,male,20,323,31.9
+small_control,EDACC-C48-A,Jamaican English,Jamaican English,Jamaican English,female,9,230,27.8
+small_control,EDACC-C48-B,Jamaican English,Jamaican English,Jamaican English,female,13,413,13.3
+small_control,EDACC-C49-A,Jamaican English,Jamaican English,Jamaican English,female,42,781,30.6
+small_control,EDACC-C49-B,Jamaican English,Jamaican English,Jamaican English,female,41,420,89.0
+small_control,EDACC-C52-A,Jamaican English,Jamaican English,Jamaican English,male,48,706,72.4
+small_control,EDACC-C52-B,Jamaican English,Jamaican English,Jamaican English,male,51,486,135.8
+small_control,EDACC-C63-B,Native US/UK English,US English,Mainstream US English,female,25,390,13.6
+small_control,EDACC-C64-A,Native US/UK English,US English,Mainstream US English,male,44,643,21.6

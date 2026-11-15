@@ -6,6 +6,7 @@ exact same way (important for a fair comparison).
 import io
 import os
 import re
+import zlib
 
 import numpy as np
 
@@ -113,3 +114,14 @@ def transcribe(processor, model, audios, prompt=None):
         p = prompt.strip()
         texts = [t[len(p):].strip() if t.startswith(p) else t for t in texts]
     return texts
+
+
+def looks_like_loop(text):
+    """True if Whisper's output looks like a repetition loop ("no, no, no, ...").
+
+    Same test the original Whisper code uses: compress the text with zlib. Normal
+    sentences barely shrink; text that repeats itself shrinks a lot. A
+    compression ratio above 2.4 is Whisper's own threshold for "this decode failed".
+    """
+    b = (text or "").encode("utf-8")
+    return len(b) > 0 and len(b) / len(zlib.compress(b)) > 2.4

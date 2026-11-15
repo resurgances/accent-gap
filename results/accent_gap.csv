@@ -1,0 +1,5 @@
+system,group,group_wer_pct,native_wer_pct,ratio_vs_native,ratio_ci_low,ratio_ci_high
+small_plain,South Asian English,20.6,23.1,0.89,0.69,1.2
+small_plain,Nigerian English,28.1,23.1,1.21,1.01,1.47
+small_plain,Jamaican English,37.6,23.1,1.63,1.03,2.6
+small_plain,Spanish-accented English,25.4,23.1,1.1,0.9,1.37

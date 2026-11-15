@@ -1,0 +1,7 @@
+{
+  "style": "sentence",
+  "nwords": 40,
+  "loop_guard": true,
+  "dev_wer_pct": 21.0,
+  "dev_plain_wer_pct": 21.9
+}

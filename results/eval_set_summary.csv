@@ -1,4 +1,10 @@
-group,subgroup,speakers,eval_clips,eval_minutes,history_clips
+group,subgroup,speakers,eval_or_dev_clips,eval_minutes,history_clips
+DEV,Irish English,7,249,26.6,778
+DEV,Italian,7,168,21.5,513
+DEV,Kenyan English,2,80,7.1,676
+DEV,Scottish English,4,131,17.1,265
+DEV,South African English,2,66,8.4,146
+DEV,Vietnamese,10,254,32.5,615
 Jamaican English,Jamaican English,6,204,20.2,448
 Native US/UK English,UK English,9,341,39.7,729
 Native US/UK English,US English,6,166,14.4,438

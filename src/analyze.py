@@ -10,6 +10,7 @@ Sections:
   E3  personal mode vs plain vs control word list
   Error analysis: missed words, rare words / numbers, clip length, worst examples
 """
+import json
 import os
 
 import matplotlib
@@ -20,9 +21,11 @@ import numpy as np
 import pandas as pd
 from wordfreq import zipf_frequency
 
-from common import RESULTS, normalize
+from common import RESULTS, load_clip, normalize
 from metrics import (bootstrap_diff_of_gains, bootstrap_paired_diff, bootstrap_ratio,
-                     bootstrap_wer, load_eval_clips, pooled_wer, score_system)
+                     bootstrap_wer, load_eval_clips, pooled_wer, read_hyps, score_system,
+                     with_loop_guard)
+from run_transcribe import output_path
 
 GROUPS = ["South Asian English", "Native US/UK English", "Nigerian English",
           "Jamaican English", "Spanish-accented English"]
@@ -218,11 +221,37 @@ def main():
     clips = load_eval_clips()
     print(f"eval clips with scorable text: {len(clips)}")
     systems = {}
+    # Final personal-mode design, chosen on DEV speakers only (src/dev_tuning.py)
+    design_path = os.path.join(RESULTS, "chosen_design.json")
+    final = json.load(open(design_path)) if os.path.exists(design_path) else None
+    loop_rows = []
     for m in MODELS:
-        for mode in ["plain", "personal", "control"]:
-            df = score_system(clips, m, mode)
-            if df is not None:
-                systems[f"{m}_{mode}"] = df
+        plain_h = read_hyps(output_path(m, "plain"))
+        df = score_system(clips, hyps=plain_h, name=f"{m}_plain") if plain_h is not None else None
+        if df is None:
+            continue
+        systems[f"{m}_plain"] = df
+        for mode in ["personal", "control"]:
+            # v1 = our original design (40-word comma list, no loop guard)
+            h = read_hyps(output_path(m, mode))
+            d1 = score_system(clips, hyps=h, name=f"{m}_{mode}_v1") if h is not None else None
+            if d1 is not None:
+                systems[f"{m}_{mode}_v1"] = d1
+            # final = design chosen on DEV speakers
+            if final:
+                h = read_hyps(output_path(m, mode, final["style"], final["nwords"]))
+                if h is None:
+                    continue
+                n_loops = 0
+                if final["loop_guard"]:
+                    h, n_loops = with_loop_guard(h, plain_h)
+                d2 = score_system(clips, hyps=h, name=f"{m}_{mode}")
+                if d2 is not None:
+                    systems[f"{m}_{mode}"] = d2
+                    loop_rows.append({"system": f"{m}_{mode}", "clips": len(d2),
+                                      "outputs_replaced_by_loop_guard": n_loops})
+    if loop_rows:
+        save(pd.DataFrame(loop_rows), "loop_guard_counts.csv")
     print("systems scored:", list(systems))
 
     # ---- E1 + all systems: WER per group / subgroup / speaker
@@ -252,7 +281,7 @@ def main():
         a = systems.get(f"{m}_plain")
         if a is None:
             continue
-        for mode in ["personal", "control"]:
+        for mode in ["personal", "control", "personal_v1", "control_v1"]:
             b = systems.get(f"{m}_{mode}")
             if b is None:
                 continue
@@ -298,7 +327,7 @@ def main():
     save(top_substitutions(words_a), "top_substitutions_by_group.csv")
 
     cat_rows = []
-    for s in ["small_plain", "small_personal", "small_control"]:
+    for s in ["small_plain", "small_personal", "small_control", "small_personal_v1"]:
         if s not in systems:
             continue
         w = explode_words(systems[s], plists)
@@ -335,8 +364,13 @@ def main():
                          "insertion_rate_pct": pct(d.I.sum() / d.N.sum())})
     save(pd.DataFrame(hall), "insertions_by_system.csv")
 
+    # Loudness of each clip (dB relative to full scale; -20 is normal speech,
+    # -45 is very quiet). Helps explain clips where Whisper outputs nothing.
+    a["audio_level_db"] = [round(20 * np.log10(np.sqrt(np.mean(load_clip(c) ** 2)) + 1e-9), 1)
+                           for c in a.clip_id]
+
     # Worst examples, side by side
-    side = a[["group", "speaker", "clip_id", "duration", "ref", "hyp", "N", "wer"]].rename(
+    side = a[["group", "speaker", "clip_id", "duration", "audio_level_db", "ref", "hyp", "N", "wer"]].rename(
         columns={"ref": "reference", "hyp": "whisper_small", "N": "ref_words", "wer": "wer_plain"})
     if "small_personal" in systems:
         p = systems["small_personal"][["clip_id", "hyp", "wer"]].rename(
