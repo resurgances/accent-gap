@@ -1,0 +1,23 @@
+# Python / environment
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# Data and audio: never commit (public data, re-downloadable, large)
+data_cache/
+*.wav
+*.mp3
+*.flac
+*.npy
+*.m4a
+*.webm
+*.ogg
+# Logs, models, misc
+logs/
+*.log
+.gradio/
+flagged/
+.DS_Store
+*.safetensors
+*.bin
+lora_out/

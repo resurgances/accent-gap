@@ -1,0 +1,105 @@
+field,split,value,clips,speakers
+accent,test,Nigerian English,1356,5
+accent,test,Kenyan English,1157,2
+accent,test,Mainstream US English,887,9
+accent,test,Spanish,879,5
+accent,test,Indian English,631,3
+accent,test,Vietnamese,583,6
+accent,test,Lithuanian,578,2
+accent,test,Jamaican English,458,4
+accent,test,Ghanain English,357,1
+accent,test,Irish English,353,3
+accent,test,Italian,275,1
+accent,test,Romanian,272,1
+accent,test,Israeli,267,1
+accent,test,Indonesian,215,1
+accent,test,Scottish English,200,2
+accent,test,Southern British English,181,2
+accent,test,Chinese,132,2
+accent,test,Don't know,95,2
+accent,test,Latin American,88,2
+accent,test,Catalan,83,1
+accent,test,French,77,1
+accent,test,Eastern European,75,1
+accent,test,European,67,1
+accent,test,Bulgarian,23,2
+accent,validation,Southern British English,1190,9
+accent,validation,Mainstream US English,1096,8
+accent,validation,Irish English,964,4
+accent,validation,Eastern European,862,2
+accent,validation,Italian,602,6
+accent,validation,Don't know,586,2
+accent,validation,Egyptian,469,2
+accent,validation,Vietnamese,463,4
+accent,validation,Chinese,447,2
+accent,validation,Indian English,373,2
+accent,validation,Indonesian English,324,2
+accent,validation,Catalan,301,1
+accent,validation,Spanish,297,1
+accent,validation,Jamaican English,295,2
+accent,validation,Scottish English,248,2
+accent,validation,South African English,246,2
+accent,validation,European,229,2
+accent,validation,Bulgarian,215,1
+accent,validation,Japanese,137,1
+accent,validation,Dutch,98,1
+accent,validation,Latin,98,1
+accent,validation,Brazilian,96,1
+accent,validation,Latin American,84,1
+accent,validation,German,73,1
+accent,validation,French,55,2
+l1,test,Nigerian English,1356,5
+l1,test,Kenyan English,1157,2
+l1,test,Spanish,796,5
+l1,test,Lithuanian,653,3
+l1,test,Vietnamese,583,6
+l1,test,Jamaican English,458,4
+l1,test,Mainstream US English,395,4
+l1,test,Ghanain English,357,1
+l1,test,Irish English,353,3
+l1,test,Hindi,350,1
+l1,test,Indian English,281,2
+l1,test,Italian,275,1
+l1,test,Urdu,274,2
+l1,test,Romanian,272,1
+l1,test,Hebrew,267,1
+l1,test,Catalan,257,3
+l1,test,Indonesian,215,1
+l1,test,Scottish English,200,2
+l1,test,Southern British English,181,2
+l1,test,Mandarin,132,2
+l1,test,Bulgarian,95,3
+l1,test,Sinhalese,95,2
+l1,test,Spanish (Mexican),78,1
+l1,test,French,77,1
+l1,test,Filipino,67,1
+l1,test,Tagalog,65,1
+l1,validation,Southern British English,1062,7
+l1,validation,Irish English,964,4
+l1,validation,Romanian,862,2
+l1,validation,Catalan,598,2
+l1,validation,Mandarin,531,3
+l1,validation,Polish,528,3
+l1,validation,Arabic,469,2
+l1,validation,Vietnamese,463,4
+l1,validation,Italian,458,4
+l1,validation,Bulgarian,431,2
+l1,validation,Indian English,373,2
+l1,validation,Mainstream US English,357,3
+l1,validation,Jamaican English,295,2
+l1,validation,Spanish,295,3
+l1,validation,Russian,287,1
+l1,validation,Montenegrin,252,1
+l1,validation,Scottish English,248,2
+l1,validation,South African English,246,2
+l1,validation,Bahasa,163,1
+l1,validation,English,161,1
+l1,validation,Japanese,137,1
+l1,validation,Icelandic,102,1
+l1,validation,Maltese,101,1
+l1,validation,Dutch,98,1
+l1,validation,Portoguese,96,1
+l1,validation,Macedonian,87,2
+l1,validation,German,73,1
+l1,validation,Korean,56,1
+l1,validation,French,55,2
