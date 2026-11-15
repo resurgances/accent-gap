@@ -34,9 +34,19 @@ speech-to-text model:
    cause.
 3. **Error analysis.** Which words are missed, whether names and numbers fail more often,
    how clip length matters, and the worst clips side by side with our best guess at why.
-4. **Demo** (`demo.py`, Gradio). Record or upload your voice and add an optional word list
-   to see Standard Whisper vs Personal mode side by side, with differences highlighted.
-   A second tab plays real EdAcc test clips, so it works without a microphone.
+4. **Demo** (`demo.py`, Gradio). Press record, talk, and press stop; nothing needs typing.
+   - It **detects the language you spoke** (Whisper) and writes down what you said.
+   - With *learn my words* on, it builds your personal word list **automatically** from what you
+     said earlier in the session. This is the same personal-mode recipe we evaluated, used only for
+     English and whisper-small, where it helped.
+   - It **translates** the text into one of 30 languages, including Sindhi, Hindi, Urdu and French,
+     with Meta's NLLB-200 translation model. A Scottish-accented English sentence can come out in
+     French, or my mom's English in Sindhi.
+   - A second tab plays real EdAcc test clips side by side (standard vs learned words, mistakes
+     highlighted), so it works without a microphone.
+
+   We did **not** measure translation quality or language detection accuracy. Those parts are
+   prototype features, and all measured results below are about English speech-to-text.
 
 **Who it's for:** people with South Asian accents, like my mom, who dictate everyday
 messages. The real target is the phone or speech-to-text maker, who could add a personal
@@ -283,6 +293,7 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
 - **Whisper** (OpenAI): Radford et al., "Robust Speech Recognition via Large-Scale Weak Supervision", 2022. Models `openai/whisper-base`, `-small`, `-medium`: https://huggingface.co/openai/whisper-small, code: https://github.com/openai/whisper (the 2.4 compression-ratio loop test comes from Whisper's decoding code)
 - **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc (license: CC BY-SA 4.0; the reference transcripts copied into `results/` come from EdAcc and are shared under the same license, no audio is redistributed)
 - **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); `peft` (LoRA, E4); Gradio (demo); Jupyter.
+- **NLLB-200** translation model (demo only), Meta AI: NLLB Team, "No Language Left Behind", 2022. Model `facebook/nllb-200-distilled-600M` (license CC BY-NC 4.0, non-commercial): https://huggingface.co/facebook/nllb-200-distilled-600M
 - **AI assistance:** Claude Code (Anthropic) was used as an AI coding assistant to write and debug the code and draft the documentation. All results were produced by running this code.
 
 ---

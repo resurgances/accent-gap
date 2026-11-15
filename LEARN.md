@@ -217,6 +217,28 @@ build-up), and the third, fixed run is the one reported.
 
 ---
 
+## Phase 5: the demo (`demo.py`)
+
+The demo uses **three AI steps**, all running on the laptop:
+1. **Language detection (Whisper).** Before transcribing, Whisper guesses which of its ~100
+   languages is being spoken. It does this by predicting the "language token" (like `<|en|>`)
+   that normally starts its output.
+2. **Speech-to-text (Whisper)**, plus *learn my words*. Every time you speak, the demo saves what
+   you said. Next time, it runs the exact recipe from `personal_words.py` on your earlier speech:
+   drop stopwords, keep words you said at least twice, top 40. The list is passed to Whisper as a
+   prompt, with the loop guard. It is only used for English with whisper-small, because that is
+   where our experiments showed it helps. On whisper-medium it hurt, so the demo switches it off there.
+3. **Translation (NLLB-200, Meta).** NLLB is a separate model trained to translate between 200
+   languages, including Sindhi (`snd_Arab`). We translate one sentence at a time, because when we
+   tested it on two sentences at once it dropped the first sentence in French.
+
+**Important honesty point:** we measured speech-to-text accuracy, not translation quality or
+language-detection accuracy. In the demo those are prototype features, and the README says so.
+Also, the learned words come from the model's own earlier output, so if it mishears a word twice,
+it may "learn" the wrong word. A real phone would learn from texts you corrected.
+
+---
+
 ## Likely judge questions (with honest answers)
 
 **1. "Your hypothesis was that Whisper is worse for South Asian accents. Did you prove it?"**
@@ -276,7 +298,13 @@ because medium tends to stop transcribing early when given a prompt. Personal wo
 better than someone else's words, but both were worse than no prompt. A product would need to
 tune the prompt for each model, or use a different method (like fine-tuning).
 
-**11. "What's the AI here, did you just call an API?"**
+**11. "How does the demo translate? Is the translation accurate?"**
+Whisper first writes down the speech in the language you spoke, then Meta's NLLB-200 model
+translates the text. We did not measure translation quality, so I can't claim it's accurate.
+I only checked a few sentences by eye. Errors can stack: if Whisper mishears a word, the
+translation will be wrong too.
+
+**12. "What's the AI here, did you just call an API?"**
 The AI is OpenAI's Whisper, a neural network that turns audio into text. It runs locally on my
 laptop (no API). My contributions are the evaluation design (groups, leak-free split, bootstrap
 CIs, control, dev set), the personal-mode method and loop guard, the error analysis, and the

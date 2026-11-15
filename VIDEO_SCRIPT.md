@@ -15,22 +15,21 @@ Times are targets. Read it in your own voice and change the words so they sound 
 ### 0:15–1:15 · Demo (60 s)
 **On screen:** the Gradio demo.
 
-1. **(0:15)** Tab "Real EdAcc examples". Pick the **Sinhalese L1 / EDACC-C10-84** clip and press play.
-   > "This is a real clip from a public dataset of accented English, EdAcc. The speaker says
-   > 'No, I can't remember'."
-2. **(0:25)** Show the word list box.
-   > "Personal mode gives the AI, OpenAI's Whisper, a short list of words this person used
-   > *earlier* in the conversation. Like what your phone already knows about you."
-3. **(0:32)** Press "Run Standard vs Personal mode".
-   > "Standard Whisper writes 'No, contrary to that'. Personal mode gets it exactly right.
-   > Mistakes are highlighted."
-4. **(0:45)** Pick the **Jamaican / EDACC-C52-312** clip ("me prefers Naruto more than Dragon Ball Z").
-   > "And here's where both fail: rare names plus a different grammar, and Whisper turns it
-   > into a normal-sounding sentence that's wrong."
-5. **(0:58)** Tab "Try it", record yourself saying one sentence with a family name or a place
-   (for example "Tell Ammi I'll pick up the biryani from Karachi Kitchen at six"), and add
-   those names to the word list.
-   > "You can try it with your own voice too. It's a prototype, not a product."
+1. **(0:15)** Tab "Speak", with "Translate to" set to **Sindhi**. Record yourself, for example
+   "Tell Ammi I'll pick up the biryani from Karachi Kitchen at six", and press stop.
+   > "I just talk. It detects that I'm speaking English, writes down what I said, and translates
+   > it into Sindhi, my parents' language. I don't type anything."
+2. **(0:30)** Record 2–3 more sentences, then point at "Words it has learned from you so far".
+   > "The more I talk, the more of my words it learns. It gives them to the AI, OpenAI's Whisper,
+   > as a hint for next time. That's my personal mode."
+3. **(0:40)** Tab "Real EdAcc examples". Pick **★ EDACC-C10-84** (Sinhalese L1), press play, then
+   "Run Standard vs With learned words".
+   > "On a real clip from the public EdAcc dataset, standard Whisper writes 'No, contrary to that'.
+   > With words learned from earlier in that conversation, it gets 'No, I can't remember' exactly
+   > right. Mistakes are highlighted."
+4. **(0:55)** Pick **★ EDACC-C52-312** (Jamaican: "me prefers Naruto more than Dragon Ball Z").
+   > "And here's where it still fails: rare names plus a different grammar, and Whisper turns it
+   > into a normal-sounding sentence that's wrong. It's a prototype, not a product."
 
 ### 1:15–1:45 · How it works + baseline (30 s)
 **On screen:** README chart `results/wer_by_group.png`, then `results/personal_mode.png`.
@@ -51,4 +50,4 @@ Times are targets. Read it in your own voice and change the words so they sound 
 > word list."
 
 ---
-Credits slide (optional, 3 s): "Whisper (OpenAI) · EdAcc (University of Edinburgh) · Hugging Face · Claude Code (Anthropic) as coding assistant"
+Credits slide (optional, 3 s): "Whisper (OpenAI) · NLLB-200 (Meta) · EdAcc (University of Edinburgh) · Hugging Face · Claude Code (Anthropic) as coding assistant"

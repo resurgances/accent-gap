@@ -40,6 +40,7 @@ English than for native US/UK English on public data, find which words it gets w
 **Credits:**
 - Whisper speech recognition models (openai/whisper-base, -small, -medium), OpenAI: https://github.com/openai/whisper , https://huggingface.co/openai/whisper-small
 - EdAcc, the Edinburgh International Accents of English Corpus (Sanabria et al., 2023): https://huggingface.co/datasets/edinburghcstr/edacc , paper: https://arxiv.org/abs/2303.18110
+- NLLB-200 translation model (facebook/nllb-200-distilled-600M), Meta AI, used in the demo for translation (CC BY-NC 4.0): https://huggingface.co/facebook/nllb-200-distilled-600M
 - Hugging Face transformers, datasets, huggingface_hub: https://github.com/huggingface/transformers
 - PyTorch: https://pytorch.org
 - jiwer (WER alignment): https://github.com/jitsi/jiwer

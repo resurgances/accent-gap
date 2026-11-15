@@ -94,7 +94,7 @@ def load_whisper(size="small"):
     return processor, model
 
 
-def transcribe(processor, model, audios, prompt=None):
+def transcribe(processor, model, audios, prompt=None, language="english"):
     """Transcribe a list of 16 kHz audio arrays (a batch) with Whisper.
 
     prompt: optional text (our "personal word list"). Whisper treats it as if
@@ -106,7 +106,7 @@ def transcribe(processor, model, audios, prompt=None):
     device = model.device
     feats = processor.feature_extractor(audios, sampling_rate=SAMPLE_RATE,
                                         return_tensors="pt").input_features.to(device)
-    kwargs = dict(language="english", task="transcribe", max_new_tokens=200)
+    kwargs = dict(language=language, task="transcribe", max_new_tokens=200)
     if prompt:
         kwargs["prompt_ids"] = torch.tensor(processor.get_prompt_ids(prompt)).to(device)
     with torch.no_grad():
