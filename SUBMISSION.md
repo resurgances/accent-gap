@@ -43,13 +43,13 @@ English than for native US/UK English on public data, find which words it gets w
 - Hugging Face transformers, datasets, huggingface_hub: https://github.com/huggingface/transformers
 - PyTorch: https://pytorch.org
 - jiwer (WER alignment): https://github.com/jitsi/jiwer
-- librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, Gradio, Jupyter
+- librosa, soundfile, pyarrow, pandas, numpy, matplotlib, wordfreq, peft (LoRA), Gradio, Jupyter
 - Claude Code (Anthropic) was used as an AI coding assistant: https://www.anthropic.com/claude-code
 
 ## Publishing the repo on GitHub (gh is not installed on this Mac)
 
 1. In your browser go to https://github.com/new, name it `accent-gap`, choose **Public**, and do NOT
-   add a README, .gitignore or license (the repo already has them). Click "Create repository".
+   add a README or .gitignore (the repo already has them). Click "Create repository".
 2. In Terminal:
 
 ```bash

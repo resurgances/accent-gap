@@ -282,7 +282,7 @@ mode stopped after one word, "cool." (WER 100%) (`results/all_clips_side_by_side
 ## Sources
 - **Whisper** (OpenAI): Radford et al., "Robust Speech Recognition via Large-Scale Weak Supervision", 2022. Models `openai/whisper-base`, `-small`, `-medium`: https://huggingface.co/openai/whisper-small, code: https://github.com/openai/whisper (the 2.4 compression-ratio loop test comes from Whisper's decoding code)
 - **EdAcc**, the Edinburgh International Accents of English Corpus: Sanabria et al., ICASSP 2023, https://arxiv.org/abs/2303.18110, data: https://huggingface.co/datasets/edinburghcstr/edacc (license: CC BY-SA 4.0; the reference transcripts copied into `results/` come from EdAcc and are shared under the same license, no audio is redistributed)
-- **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); Gradio (demo); Jupyter.
+- **Libraries:** Hugging Face `transformers`, `datasets`, `huggingface_hub`; PyTorch; `jiwer` (WER alignment); `librosa` and `soundfile` (audio); `pyarrow`; `pandas`; `numpy`; `matplotlib`; `wordfreq` (word frequency, to flag rare words); `peft` (LoRA, E4); Gradio (demo); Jupyter.
 - **AI assistance:** Claude Code (Anthropic) was used as an AI coding assistant to write and debug the code and draft the documentation. All results were produced by running this code.
 
 ---
